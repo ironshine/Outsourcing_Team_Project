@@ -44,7 +44,7 @@ public class StoreService {
 
     public List<StoresResponseDto> getStores(String store_name) {
         List<StoresResponseDto> dtoList = new ArrayList<>();
-        List<Store> storeList = storeRepository.findallByStoreName(store_name);
+        List<Store> storeList = storeRepository.findAllByStoreNameAndStoreStatus(store_name, true);
         for (Store store : storeList) {
             StoresResponseDto dto = new StoresResponseDto(
                     store.getId(),
@@ -69,7 +69,7 @@ public class StoreService {
                 store.getStoreName(),
                 store.getStoreCloseTime(),
                 store.getStoreOpenTime(),
-                store.getStoreName(),
+                store.getMinOrderPrice(),
                 store.getStoreStatus(),
                 store.getCreateAt(),
                 store.getUpdatedAt());
@@ -91,6 +91,7 @@ public class StoreService {
                 store.getUpdatedAt());
     }
 
+    @Transactional
     public String closedStore(Long storeId) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NullPointerException("해당 id의 가게가 없습니다."));

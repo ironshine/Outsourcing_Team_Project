@@ -11,5 +11,4 @@ public class StoreRequestDto {
     private String storeOpenTime;
     private String storeCloseTime;
     private String minOrderPrice;
-    private Boolean storeStatus;
 }

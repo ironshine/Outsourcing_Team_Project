@@ -22,8 +22,8 @@ public class StoreController {
         return ResponseEntity.ok(storeService.addStores(requestDto)); //, authUser));
     }
 
-    @GetMapping("/{store_name}")
-    public ResponseEntity<List<StoresResponseDto>> getStores(@PathVariable String store_name) {
+    @GetMapping
+    public ResponseEntity<List<StoresResponseDto>> getStores(@RequestParam String store_name) {
         return ResponseEntity.ok(storeService.getStores(store_name));
     }
 

@@ -69,7 +69,6 @@ public class Store {
         this.storeOpenTime = requestDto.getStoreOpenTime();
         this.storeCloseTime = requestDto.getStoreCloseTime();
         this.minOrderPrice = requestDto.getMinOrderPrice();
-        this.storeStatus = requestDto.getStoreStatus();
     }
 
     public void closedStore() {
