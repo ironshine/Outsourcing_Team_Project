@@ -20,7 +20,8 @@ public class StoreService {
     private final StoreRepository storeRepository;
 
     @Transactional
-    public StoreResponseDto addStores(StoreRequestDto requestDto){ //, AuthUser authUser) {
+    public StoreResponseDto addStores(StoreRequestDto requestDto) { //, AuthUser authUser) {
+        // requestDto 값의 Store 생성 (store 값은 생성시 항상 true)
         Store store = new Store(
                 requestDto.getStoreName(),
                 requestDto.getStoreOpenTime(),
@@ -29,8 +30,10 @@ public class StoreService {
                 true);
 //                , authUser.getUserId());
 
+        // store 저장
         storeRepository.save(store);
 
+        // store ResponseDto 로 변경해서 반환
         return new StoreResponseDto(
                 store.getId(),
                 store.getStoreName(),
@@ -43,9 +46,14 @@ public class StoreService {
     }
 
     public List<StoresResponseDto> getStores(String store_name) {
+        // DTO List 생성
         List<StoresResponseDto> dtoList = new ArrayList<>();
+
+        // 입력받은 가게 이름과 동일한 storeStatus 가 true 인 Store List 찾아와서 storeList 에 담기
         List<Store> storeList = storeRepository.findAllByStoreNameAndStoreStatus(store_name, true);
+
         for (Store store : storeList) {
+            // Store -> ResponseDto 변경
             StoresResponseDto dto = new StoresResponseDto(
                     store.getId(),
                     store.getStoreName(),
@@ -55,15 +63,19 @@ public class StoreService {
                     store.getStoreStatus(),
                     store.getCreateAt(),
                     store.getUpdatedAt()
-                    );
+            );
+            // 변경된 ResponseDto DTO List 에 추가
             dtoList.add(dto);
         }
+        // 전부 추가 받은 DTO List 반환
         return dtoList;
     }
 
     public StoreResponseDto getStore(Long storeId) {
+        // 입력받은 가게 id로 가게 찾아오기
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NullPointerException("해당 id의 가게가 없습니다."));
+        // 찾아온 가게 DTO 로 변경해서 반환
         return new StoreResponseDto(
                 store.getId(),
                 store.getStoreName(),
@@ -77,9 +89,16 @@ public class StoreService {
 
     @Transactional
     public StoreResponseDto updateStore(Long storeId, StoreRequestDto requestDto) {
+        // 입력받은 가게 id로 가게 찾아오기
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NullPointerException("해당 id의 가게가 없습니다."));
-        store.updateStore(requestDto);
+        // 가게 정보 수정
+        store.updateStore(
+                requestDto.getStoreName(),
+                requestDto.getStoreOpenTime(),
+                requestDto.getStoreCloseTime(),
+                store.getMinOrderPrice());
+        // 수정된 가게 정보 반환
         return new StoreResponseDto(
                 store.getId(),
                 store.getStoreName(),
@@ -93,9 +112,12 @@ public class StoreService {
 
     @Transactional
     public String closedStore(Long storeId) {
+        // 입력받은 가게 id로 가게 찾아오기
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NullPointerException("해당 id의 가게가 없습니다."));
+        // storeStatus false 변경 메서드
         store.closedStore();
+
         return "폐업신고 완료";
     }
 }
