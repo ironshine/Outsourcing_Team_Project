@@ -1,8 +1,6 @@
 package com.sparta.outsourcing_team_project.orders.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,10 +15,13 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class TimeStamp {
 
-    @Column(updatable = false)
     @CreatedDate
+    @Column(updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifiedAt;
 }

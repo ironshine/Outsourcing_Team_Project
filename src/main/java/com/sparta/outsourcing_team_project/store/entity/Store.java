@@ -1,5 +1,7 @@
 package com.sparta.outsourcing_team_project.store.entity;
 
+import com.sparta.outsourcing_team_project.orders.entity.TimeStamp;
+//import com.sparta.outsourcing_team_project.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,14 +9,14 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "stores")
+@Table(name = "store")
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class Store {
+public class Store extends TimeStamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,24 +36,14 @@ public class Store {
     @Column(name = "store_status", nullable = false)
     private Boolean storeStatus; // true : 가게정상운영(기본값), false : 가게폐업
 
-    @CreatedDate
-    @Column(updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createAt;
-
-    @LastModifiedDate
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime updatedAt;
-
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "user_id") // 사장님 id
 //    private User user;
 //
-//    @OneToMany(mappedBy = "stores")
+//    @OneToMany(mappedBy = "store")
 //    private List<Menu> menus = new ArrayList<>();
 
-    public Store(String storeName, String storeOpenTime, String storeCloseTime, String minOrderPrice, Boolean storeStatus) { //, User user, List<Menu> menus) {
+    public Store(String storeName, String storeOpenTime, String storeCloseTime, String minOrderPrice, Boolean storeStatus){ //, User user){//, List<Menu> menus) {
         this.storeName = storeName;
         this.storeOpenTime = storeOpenTime;
         this.storeCloseTime = storeCloseTime;
