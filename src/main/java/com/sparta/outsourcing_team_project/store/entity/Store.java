@@ -1,6 +1,5 @@
 package com.sparta.outsourcing_team_project.store.entity;
 
-import com.sparta.outsourcing_team_project.store.dto.StoreRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,9 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.awt.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 @Entity
 @Getter
@@ -35,7 +32,7 @@ public class Store {
     private String minOrderPrice;
 
     @Column(name = "store_status", nullable = false)
-    private Boolean storeStatus;
+    private Boolean storeStatus; // true : 가게정상운영(기본값), false : 가게폐업
 
     @CreatedDate
     @Column(updatable = false)
@@ -54,7 +51,7 @@ public class Store {
 //    @OneToMany(mappedBy = "stores")
 //    private List<Menu> menus = new ArrayList<>();
 
-    public Store(String storeName, String storeOpenTime, String storeCloseTime, String minOrderPrice, Boolean storeStatus){ //, User user, List<Menu> menus) {
+    public Store(String storeName, String storeOpenTime, String storeCloseTime, String minOrderPrice, Boolean storeStatus) { //, User user, List<Menu> menus) {
         this.storeName = storeName;
         this.storeOpenTime = storeOpenTime;
         this.storeCloseTime = storeCloseTime;
@@ -64,13 +61,16 @@ public class Store {
 //        this.menus = menus;
     }
 
-    public void updateStore(StoreRequestDto requestDto) {
-        this.storeName = requestDto.getStoreName();
-        this.storeOpenTime = requestDto.getStoreOpenTime();
-        this.storeCloseTime = requestDto.getStoreCloseTime();
-        this.minOrderPrice = requestDto.getMinOrderPrice();
+    // 가게 수정 메서드
+    // 파라미터 StoreRequestDto -> 풀어서 받게 변경 (테스트 코드 작성 쉽게 하기 위해서)
+    public void updateStore(String storeName, String storeOpenTime, String storeCloseTime, String minOrderPrice) {
+        this.storeName = storeName;
+        this.storeOpenTime = storeOpenTime;
+        this.storeCloseTime = storeCloseTime;
+        this.minOrderPrice = minOrderPrice;
     }
 
+    // 가게 상태 변경 메서드 (폐업)
     public void closedStore() {
         this.storeStatus = false;
     }
