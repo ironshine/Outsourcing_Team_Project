@@ -1,6 +1,8 @@
 package com.sparta.outsourcing_team_project.store.entity;
 
 import com.sparta.outsourcing_team_project.menu.entity.Menu;
+import com.sparta.outsourcing_team_project.orders.entity.TimeStamp;
+//import com.sparta.outsourcing_team_project.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,16 +10,16 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@Table(name = "stores")
+@Table(name = "store")
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class Store {
+public class Store extends TimeStamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,7 +56,7 @@ public class Store {
     @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Menu> menus = new ArrayList<>();
 
-    public Store(String storeName, String storeOpenTime, String storeCloseTime, String minOrderPrice, Boolean storeStatus) { //, User user, List<Menu> menus) {
+    public Store(String storeName, String storeOpenTime, String storeCloseTime, String minOrderPrice, Boolean storeStatus){ //, User user){//, List<Menu> menus) {
         this.storeName = storeName;
         this.storeOpenTime = storeOpenTime;
         this.storeCloseTime = storeCloseTime;
