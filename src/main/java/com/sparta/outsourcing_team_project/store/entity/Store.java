@@ -1,5 +1,6 @@
 package com.sparta.outsourcing_team_project.store.entity;
 
+import com.sparta.outsourcing_team_project.menu.entity.Menu;
 import com.sparta.outsourcing_team_project.orders.entity.TimeStamp;
 //import com.sparta.outsourcing_team_project.user.entity.User;
 import jakarta.persistence.*;
@@ -11,6 +12,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,12 +39,22 @@ public class Store extends TimeStamp {
     @Column(name = "store_status", nullable = false)
     private Boolean storeStatus; // true : 가게정상운영(기본값), false : 가게폐업
 
-//    @ManyToOne(fetch = FetchType.LAZY)
+    @CreatedDate
+    @Column(updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createAt;
+
+    @LastModifiedDate
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime updatedAt;
+
+    //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "user_id") // 사장님 id
 //    private User user;
 //
-//    @OneToMany(mappedBy = "store")
-//    private List<Menu> menus = new ArrayList<>();
+    @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Menu> menus = new ArrayList<>();
 
     public Store(String storeName, String storeOpenTime, String storeCloseTime, String minOrderPrice, Boolean storeStatus){ //, User user){//, List<Menu> menus) {
         this.storeName = storeName;
