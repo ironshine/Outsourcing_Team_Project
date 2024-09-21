@@ -1,12 +1,12 @@
 package com.sparta.outsourcing_team_project.orders.entity;
 
+import com.sparta.outsourcing_team_project.menu.entity.Menu;
 import com.sparta.outsourcing_team_project.orders.enums.OrderStatusEnum;
+import com.sparta.outsourcing_team_project.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.awt.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,9 +26,9 @@ public class Orders extends TimeStamp {
     private OrderStatusEnum orderStatus;
 
     // 연관관계 임시설정 합병후 확인필요
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+//    @OneToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
     @OneToOne
     @JoinColumn(name = "store_id")
