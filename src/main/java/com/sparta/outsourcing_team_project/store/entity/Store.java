@@ -1,5 +1,6 @@
 package com.sparta.outsourcing_team_project.store.entity;
 
+import com.sparta.outsourcing_team_project.menu.entity.Menu;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -44,12 +47,12 @@ public class Store {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
+    //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "user_id") // 사장님 id
 //    private User user;
 //
-//    @OneToMany(mappedBy = "stores")
-//    private List<Menu> menus = new ArrayList<>();
+    @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Menu> menus = new ArrayList<>();
 
     public Store(String storeName, String storeOpenTime, String storeCloseTime, String minOrderPrice, Boolean storeStatus) { //, User user, List<Menu> menus) {
         this.storeName = storeName;
