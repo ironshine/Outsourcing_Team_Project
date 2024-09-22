@@ -15,12 +15,17 @@ public class OptionController {
     private final OptionService optionService;
 
     @PostMapping("/{optionGroupId}")
-    public ResponseEntity<OptionResponse> create(@PathVariable long optionGroupId, @RequestBody OptionRequest optionRequest) {
+    public ResponseEntity<OptionResponse> create(
+            @PathVariable long optionGroupId,
+            @RequestBody OptionRequest optionRequest) {
         return ResponseEntity.ok().body(optionService.create(optionGroupId, optionRequest));
     }
 
     @PutMapping("/{optionGroupId}/options/{optionId}")
-    public ResponseEntity<OptionResponse> update(@PathVariable long optionGroupId, @PathVariable long optionId, @RequestBody OptionRequest optionRequest) {
+    public ResponseEntity<OptionResponse> update(
+            @PathVariable long optionGroupId,
+            @PathVariable long optionId,
+            @RequestBody OptionRequest optionRequest) {
         return ResponseEntity.ok().body(optionService.update(optionGroupId, optionId, optionRequest));
     }
 

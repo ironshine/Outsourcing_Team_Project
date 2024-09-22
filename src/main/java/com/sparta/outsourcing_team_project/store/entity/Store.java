@@ -4,6 +4,7 @@ import com.sparta.outsourcing_team_project.menu.entity.Menu;
 import com.sparta.outsourcing_team_project.orders.entity.TimeStamp;
 import com.sparta.outsourcing_team_project.store.dto.StoreRequestDto;
 import com.sparta.outsourcing_team_project.user.entity.User;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Store extends TimeStamp {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "store_id")

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 public class MenuResponse {
 
     private final String menuName;
-    private final int price;
+    private final Integer price;
 
     public static MenuResponse entityToDto(Menu menu) {
         return new MenuResponse(

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 public class OptionResponse {
 
     private final String optionName;
-    private final int optionPrice;
+    private final Integer optionPrice;
 
     public static OptionResponse entityToDto(Option option) {
         return new OptionResponse(
