@@ -26,8 +26,7 @@ public class CustomerOrder extends TimeStamp {
     private OrderStatusEnum orderStatus;
 
     // 연관관계 임시설정 합병후 확인필요
-//    @OneToOne
-//    @JoinColumn(name = "user_id")
+//    @OneToOne(mappedBy = "user")
 //    private User user;
 
     @OneToOne
