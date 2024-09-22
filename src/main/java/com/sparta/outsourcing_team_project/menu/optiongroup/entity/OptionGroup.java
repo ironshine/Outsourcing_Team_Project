@@ -34,11 +34,6 @@ public class OptionGroup {
     @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
 
-    public OptionGroup(String optionGroupName, Menu menu) {
-        this.optionGroupName = optionGroupName;
-        this.menu = menu;
-    }
-
     public void update(String optionGroupName) {
         this.optionGroupName = optionGroupName;
     }

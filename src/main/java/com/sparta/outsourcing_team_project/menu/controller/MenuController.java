@@ -16,12 +16,17 @@ public class MenuController {
     private final MenuService menuService;
 
     @PostMapping("/{storeId}/menus")
-    public ResponseEntity<MenuResponse> create(@PathVariable long storeId, @RequestBody MenuRequest menuRequest) {
+    public ResponseEntity<MenuResponse> create(
+            @PathVariable long storeId,
+            @RequestBody MenuRequest menuRequest) {
         return ResponseEntity.ok().body(menuService.create(storeId, menuRequest));
     }
 
     @PutMapping("/{storeId}/menus/{menuId}")
-    public ResponseEntity<MenuResponse> update(@PathVariable long storeId, @PathVariable long menuId, @RequestBody MenuUpdateRequest menuUpdateRequest) {
+    public ResponseEntity<MenuResponse> update(
+            @PathVariable long storeId,
+            @PathVariable long menuId,
+            @RequestBody MenuUpdateRequest menuUpdateRequest) {
         return ResponseEntity.ok().body(menuService.update(storeId, menuId, menuUpdateRequest));
     }
 
