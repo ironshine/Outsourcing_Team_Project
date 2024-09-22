@@ -1,16 +1,14 @@
 package com.sparta.outsourcing_team_project.store.entity;
 
 import com.sparta.outsourcing_team_project.menu.entity.Menu;
-import com.sparta.outsourcing_team_project.orders.entity.TimeStamp;
+import com.sparta.outsourcing_team_project.order.entity.TimeStamp;
 //import com.sparta.outsourcing_team_project.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

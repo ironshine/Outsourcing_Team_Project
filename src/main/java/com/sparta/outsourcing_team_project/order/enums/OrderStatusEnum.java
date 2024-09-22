@@ -1,4 +1,4 @@
-package com.sparta.outsourcing_team_project.orders.enums;
+package com.sparta.outsourcing_team_project.order.enums;
 
 import lombok.Getter;
 

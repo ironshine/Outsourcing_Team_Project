@@ -1,9 +1,9 @@
-package com.sparta.outsourcing_team_project.orders.service;
+package com.sparta.outsourcing_team_project.order.service;
 
-import com.sparta.outsourcing_team_project.orders.dto.RequestDto;
-import com.sparta.outsourcing_team_project.orders.dto.ResponseDto;
-import com.sparta.outsourcing_team_project.orders.enums.OrderStatusEnum;
-import com.sparta.outsourcing_team_project.orders.repository.OrderRepository;
+import com.sparta.outsourcing_team_project.order.dto.RequestDto;
+import com.sparta.outsourcing_team_project.order.dto.ResponseDto;
+import com.sparta.outsourcing_team_project.order.enums.OrderStatusEnum;
+import com.sparta.outsourcing_team_project.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

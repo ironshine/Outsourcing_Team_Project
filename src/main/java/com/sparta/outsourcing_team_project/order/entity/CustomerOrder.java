@@ -1,7 +1,7 @@
-package com.sparta.outsourcing_team_project.orders.entity;
+package com.sparta.outsourcing_team_project.order.entity;
 
 import com.sparta.outsourcing_team_project.menu.entity.Menu;
-import com.sparta.outsourcing_team_project.orders.enums.OrderStatusEnum;
+import com.sparta.outsourcing_team_project.order.enums.OrderStatusEnum;
 import com.sparta.outsourcing_team_project.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "orders")
-public class Orders extends TimeStamp {
+@Table(name = "customer_order")
+public class CustomerOrder extends TimeStamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
