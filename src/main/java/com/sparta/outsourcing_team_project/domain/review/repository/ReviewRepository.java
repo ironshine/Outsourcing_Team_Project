@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    List<Review> findAllByStore_IdAndRatingBetweenOrderByModifiedAtDesc(Long storeId, int minRating, int maxRating);
+    List<Review> findAllByStoreIdAndRatingBetweenOrderByModifiedAtDesc(Long storeId, int minRating, int maxRating);
 }

@@ -29,8 +29,9 @@ public class CustomerOrder extends TimeStamp {
     @Enumerated(EnumType.STRING)
     private OrderStatusEnum orderStatus;
 
-     //연관관계 임시설정 합병후 확인필요
-    @OneToOne(mappedBy = "user")
+    //연관관계 임시설정 합병후 확인필요
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToOne
