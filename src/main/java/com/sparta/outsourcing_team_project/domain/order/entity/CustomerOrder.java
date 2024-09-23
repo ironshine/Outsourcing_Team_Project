@@ -27,7 +27,7 @@ public class CustomerOrder extends TimeStamp {
 
     @Column(nullable = false, name = "order_status", length = 6)
     @Enumerated(EnumType.STRING)
-    private OrderStatusEnum orderStatus;
+    private OrderStatusEnum orderStatus = OrderStatusEnum.STATELESS;
 
     //연관관계 임시설정 합병후 확인필요
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,10 +42,13 @@ public class CustomerOrder extends TimeStamp {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    public CustomerOrder(Integer totalPrice, String address, OrderStatusEnum orderStatus) {
+    public CustomerOrder(Integer totalPrice, String address, OrderStatusEnum orderStatus, User user, Store store, Menu menu) {
         this.totalPrice = totalPrice;
         this.address = address;
         this.orderStatus = orderStatus;
+        this.user = user;
+        this.store = store;
+        this.menu = menu;
     }
 
     public CustomerOrder changeStatus(OrderStatusEnum status){

@@ -9,6 +9,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
@@ -17,6 +18,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class LoggingAspect {
 
+    @Autowired
     private final UserRepository userRepository;
 
     @Pointcut("@annotation(com.sparta.outsourcing_team_project.domain.order.aop.annotation.RequestTrack)")
