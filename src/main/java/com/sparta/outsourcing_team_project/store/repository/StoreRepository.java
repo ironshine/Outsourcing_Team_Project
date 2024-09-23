@@ -1,5 +1,6 @@
 package com.sparta.outsourcing_team_project.store.repository;
 
+import com.sparta.outsourcing_team_project.menu.enums.MenuCategory;
 import com.sparta.outsourcing_team_project.store.entity.Store;
 import com.sparta.outsourcing_team_project.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     List<Store> findByStoreNameOrMenuName(@Param("searchTerm") String storeTerm);
 
     Long countByUserAndStoreStatus(User user, Boolean storeStatus);
+    @Query("SELECT s FROM Store s LEFT JOIN s.menus m WHERE m.menuCategory IN (:category)")
+    List<Store> findAllByMenuCategory(@Param("category") MenuCategory category);
 }

@@ -1,9 +1,6 @@
 package com.sparta.outsourcing_team_project.store.service;
 
-import com.sparta.outsourcing_team_project.store.dto.AdsResponseDto;
-import com.sparta.outsourcing_team_project.store.dto.StoreRequestDto;
-import com.sparta.outsourcing_team_project.store.dto.StoreResponseDto;
-import com.sparta.outsourcing_team_project.store.dto.StoresResponseDto;
+import com.sparta.outsourcing_team_project.store.dto.*;
 import com.sparta.outsourcing_team_project.store.entity.Store;
 import com.sparta.outsourcing_team_project.store.repository.StoreRepository;
 import com.sparta.outsourcing_team_project.user.entity.AuthUser;
@@ -31,7 +28,7 @@ public class StoreService {
      * @throws Exception
      */
     @Transactional
-    public StoreResponseDto addStores(StoreRequestDto storeRequestDto, AuthUser authUser) throws Exception {
+    public StoreSaveResponseDto addStores(StoreRequestDto storeRequestDto, AuthUser authUser) throws Exception {
         if (authUser.getUser().getAuth() != UserEnum.OWNER) {
             throw new IllegalAccessException("사장님 권한이 아닙니다");
         }
@@ -50,7 +47,7 @@ public class StoreService {
 
         storeRepository.save(store);
 
-        return new StoreResponseDto(store);
+        return new StoreSaveResponseDto(store);
     }
 
     /**

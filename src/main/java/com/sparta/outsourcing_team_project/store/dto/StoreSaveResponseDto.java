@@ -7,11 +7,10 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class StoreResponseDto {
+public class StoreSaveResponseDto {
     private final Long id;
     private final String storeName;
     private final LocalTime storeOpenTime;
@@ -21,9 +20,8 @@ public class StoreResponseDto {
     private final LocalDateTime createAt;
     private final LocalDateTime updatedAt;
     private final Long userId;
-    private final List<MenuResponse> menus;
 
-    public StoreResponseDto(Store store) {
+    public StoreSaveResponseDto(Store store) {
         this.id = store.getId();
         this.storeName = store.getStoreName();
         this.storeOpenTime = store.getStoreOpenTime();
@@ -33,10 +31,5 @@ public class StoreResponseDto {
         this.createAt = store.getCreateAt();
         this.updatedAt = store.getUpdatedAt();
         this.userId = store.getUser().getId();
-        this.menus = menuResponseList(store.getMenus());
-    }
-
-    private List<MenuResponse> menuResponseList(List<Menu> menuList) {
-        return menuList.stream().map(MenuResponse::entityToDto).toList();
     }
 }
