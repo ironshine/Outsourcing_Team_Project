@@ -16,7 +16,7 @@ public class StoreResponseDto {
     private final LocalTime storeOpenTime;
     private final LocalTime storeCloseTime;
     private final int minOrderPrice;
-    private final Boolean storeStatus;
+    private final String storeStatus;
     private final LocalDateTime createAt;
     private final LocalDateTime updatedAt;
     private final Long userId;
@@ -28,7 +28,7 @@ public class StoreResponseDto {
         this.storeOpenTime = store.getStoreOpenTime();
         this.storeCloseTime = store.getStoreCloseTime();
         this.minOrderPrice = store.getMinOrderPrice();
-        this.storeStatus = store.getStoreStatus();
+        this.storeStatus = storeStatus(store.getStoreStatus());
         this.createAt = store.getCreateAt();
         this.updatedAt = store.getUpdatedAt();
         this.userId = store.getUser().getUserId();
@@ -37,5 +37,8 @@ public class StoreResponseDto {
 
     private List<MenuResponse> menuResponseList(List<Menu> menuList) {
         return menuList.stream().map(MenuResponse::entityToDto).toList();
+    }
+    protected static String storeStatus(boolean storeStatus) {
+        return storeStatus ? "정상영업" : "폐업";
     }
 }
