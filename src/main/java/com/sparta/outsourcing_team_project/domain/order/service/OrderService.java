@@ -82,11 +82,6 @@ public class OrderService {
         );
         List<Option> options = optionRepository.findByIdIn(requestDto.getOptionIds());
 
-        // 옵션 데이터 검증 로직
-        if(options.isEmpty()){
-            new EntityNotFoundException("조회되는 옵션이 없습니다.");
-        }
-
         // 주문 총 가격
         Integer totalPrice = 0;
         for(Option option : options){
