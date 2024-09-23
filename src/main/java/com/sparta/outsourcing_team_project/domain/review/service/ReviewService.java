@@ -1,9 +1,9 @@
 package com.sparta.outsourcing_team_project.domain.review.service;
 
 import com.sparta.outsourcing_team_project.domain.common.dto.AuthUser;
-import com.sparta.outsourcing_team_project.domain.orders.entity.Orders;
-import com.sparta.outsourcing_team_project.domain.orders.enums.OrderStatusEnum;
-import com.sparta.outsourcing_team_project.domain.orders.repository.OrderRepository;
+import com.sparta.outsourcing_team_project.domain.order.entity.CustomerOrder;
+import com.sparta.outsourcing_team_project.domain.order.enums.OrderStatusEnum;
+import com.sparta.outsourcing_team_project.domain.order.repository.OrderRepository;
 import com.sparta.outsourcing_team_project.domain.review.dto.ReviewRequestDto;
 import com.sparta.outsourcing_team_project.domain.review.dto.ReviewResponseDto;
 import com.sparta.outsourcing_team_project.domain.review.entity.Review;
@@ -25,7 +25,7 @@ public class ReviewService {
 
     @Transactional
     public ReviewResponseDto addReview(long storeId, long orderId, ReviewRequestDto requestDto, AuthUser authUser) {
-        Orders order = orderRepository.findById(orderId).orElseThrow(()-> new NullPointerException("존재하지 않는 주문입니다."));
+        CustomerOrder order = orderRepository.findById(orderId).orElseThrow(()-> new NullPointerException("존재하지 않는 주문입니다."));
 
         if (order.getOrderStatus() != OrderStatusEnum.DELIVERED){
             throw new IllegalArgumentException("배달이 완료되지 않은 주문입니다");
@@ -46,7 +46,7 @@ public class ReviewService {
     }
 
     public List<ReviewResponseDto> getReviewByStar(long storeId, int minRating, int maxRating) {
-        List<Review> reviewList = reviewRepository.findAllByStore_IdAndRatingBetweenOrderByModifiedAtDesc(storeId, minRating, maxRating);
+        List<Review> reviewList = reviewRepository.findAllByStoreIdAndRatingBetweenOrderByModifiedAtDesc(storeId, minRating, maxRating);
         List<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
 
         for (Review review : reviewList) {
