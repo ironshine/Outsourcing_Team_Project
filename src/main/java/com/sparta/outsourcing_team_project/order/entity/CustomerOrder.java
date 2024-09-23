@@ -18,6 +18,8 @@ public class CustomerOrder extends TimeStamp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Integer totalPrice;
+
     @Column(nullable = false)
     private String address;
 
@@ -25,9 +27,9 @@ public class CustomerOrder extends TimeStamp {
     @Enumerated(EnumType.STRING)
     private OrderStatusEnum orderStatus;
 
-    // 연관관계 임시설정 합병후 확인필요
-//    @OneToOne(mappedBy = "user")
-//    private User user;
+     //연관관계 임시설정 합병후 확인필요
+    @OneToOne(mappedBy = "user")
+    private User user;
 
     @OneToOne
     @JoinColumn(name = "store_id")
@@ -36,4 +38,15 @@ public class CustomerOrder extends TimeStamp {
     @OneToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
+
+    public CustomerOrder(Integer totalPrice, String address, OrderStatusEnum orderStatus) {
+        this.totalPrice = totalPrice;
+        this.address = address;
+        this.orderStatus = orderStatus;
+    }
+
+    public CustomerOrder changeStatus(OrderStatusEnum status){
+        this.orderStatus = status;
+        return this;
+    }
 }

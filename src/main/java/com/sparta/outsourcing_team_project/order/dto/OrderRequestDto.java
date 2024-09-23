@@ -1,4 +1,4 @@
 package com.sparta.outsourcing_team_project.order.dto;
 
-public class ResponseDto {
+public class OrderRequestDto {
 }
