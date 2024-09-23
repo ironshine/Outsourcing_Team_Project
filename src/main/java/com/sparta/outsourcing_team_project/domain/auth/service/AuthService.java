@@ -56,7 +56,7 @@ public class AuthService {
             throw new AuthException("잘못된 비밀번호입니다.");
         }
 
-        String bearerToken = jwtUtil.createToken(user.getUserId(), user.getUserEmail(), UserRole.USER);
+        String bearerToken = jwtUtil.createToken(user.getUserId(), user.getUserEmail(), user.getUserRole());
 
         return new SigninResponse(bearerToken);
     }
