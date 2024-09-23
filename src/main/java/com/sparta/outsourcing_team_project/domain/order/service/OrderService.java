@@ -1,5 +1,6 @@
 package com.sparta.outsourcing_team_project.domain.order.service;
 
+import com.sparta.outsourcing_team_project.domain.common.dto.AuthUser;
 import com.sparta.outsourcing_team_project.domain.menu.entity.Menu;
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.entity.OptionGroup;
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.option.entity.Option;
@@ -12,6 +13,8 @@ import com.sparta.outsourcing_team_project.domain.order.enums.OrderStatusEnum;
 import com.sparta.outsourcing_team_project.domain.order.repository.OrderRepository;
 import com.sparta.outsourcing_team_project.domain.store.entity.Store;
 import com.sparta.outsourcing_team_project.domain.store.repository.StoreRepository;
+import com.sparta.outsourcing_team_project.domain.user.entity.User;
+import com.sparta.outsourcing_team_project.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,8 +31,9 @@ public class OrderService {
     private final MenuRepository menuRepository;
     private final OptionRepository optionRepository;
     private final OptionGroupRepository optionGroupRepository;
+    private final UserRepository userRepository;
 
-    public List<OrderOptionsResponseDto> getMenuOptions(Long storeId, Long menuId) {
+    public List<OrderOptionsResponseDto> getMenuOptions(Long storeId, Long menuId, AuthUser authUser) {
 
         // 유저영역 개발시 검증 로직 추가구현필요
         Store store = storeRepository.findById(storeId).orElseThrow();
@@ -56,10 +60,11 @@ public class OrderService {
         return optionDtos;
     }
 
-    public OrderResponseDto createOrder(OrderOptionsRequestDto requestDto) {
+    public OrderResponseDto createOrder(OrderOptionsRequestDto requestDto, AuthUser authUser) {
         // 유저영역 개발시 검증 로직 추가구현필요
         Store store = storeRepository.findById(requestDto.getStoreId()).orElseThrow();
         Menu menu = menuRepository.findById(requestDto.getMenuId()).orElseThrow();
+        User user = userRepository.findById(authUser.getUserId()).orElseThrow();
         List<Option> options = optionRepository.findByIdIn(requestDto.getOptionIds());
         if(options.isEmpty()){
             // 예외문 커스텀필요
@@ -90,7 +95,7 @@ public class OrderService {
         OrderResponseDto responseDto = OrderResponseDto
                 .builder()
                 .orderId(order.getId())
-                .userName("임시")
+                .userName(user.getUserName())
                 .storeName(store.getStoreName())
                 .menuName(menu.getMenuName())
                 .price(menu.getPrice())
@@ -105,7 +110,7 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderStatusResponseDto acceptOrder(Long orderId) {
+    public OrderStatusResponseDto acceptOrder(Long orderId, AuthUser authUser) {
         // 주문데이터 조회
         CustomerOrder order = orderRepository.findById(orderId).orElseThrow();
 
@@ -124,7 +129,7 @@ public class OrderService {
         return response;
     }
 
-    public OrderStatusResponseDto changeOrderStatus(Long storeId, Long orderId, OrderStatusEnum orderStatus) {
+    public OrderStatusResponseDto changeOrderStatus(Long storeId, Long orderId, OrderStatusEnum orderStatus, AuthUser authUser) {
         // 가게 데이터 조회
         Store store = storeRepository.findById(storeId).orElseThrow();
 
