@@ -43,15 +43,7 @@ public class SearchService {
         redisTemplate.expire("search:" + searchTerm, 1, timeUnit);
 
         return storeRepository.findByStoreNameOrMenuName(searchTerm).stream()
-                .map(store -> new StoresResponseDto(
-                        store.getId(),
-                        store.getStoreName(),
-                        store.getStoreOpenTime(),
-                        store.getStoreCloseTime(),
-                        store.getMinOrderPrice(),
-                        store.getStoreStatus(),
-                        store.getCreateAt(),
-                        store.getUpdatedAt()))
+                .map(StoresResponseDto::new)
                 .toList();
     }
 

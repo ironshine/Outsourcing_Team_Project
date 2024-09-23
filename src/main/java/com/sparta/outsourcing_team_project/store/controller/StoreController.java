@@ -1,9 +1,6 @@
 package com.sparta.outsourcing_team_project.store.controller;
 
-import com.sparta.outsourcing_team_project.store.dto.AdsResponseDto;
-import com.sparta.outsourcing_team_project.store.dto.StoreRequestDto;
-import com.sparta.outsourcing_team_project.store.dto.StoreResponseDto;
-import com.sparta.outsourcing_team_project.store.dto.StoresResponseDto;
+import com.sparta.outsourcing_team_project.store.dto.*;
 import com.sparta.outsourcing_team_project.store.service.StoreService;
 import com.sparta.outsourcing_team_project.user.annotation.Auth;
 import com.sparta.outsourcing_team_project.user.entity.AuthUser;
@@ -21,7 +18,7 @@ public class StoreController {
     private final StoreService storeService;
 
     @PostMapping
-    public ResponseEntity<StoreResponseDto> addStores(
+    public ResponseEntity<StoreSaveResponseDto> addStores(
             @RequestBody StoreRequestDto requestDto,
             @Auth AuthUser authUser) throws Exception {
         return ResponseEntity.ok(storeService.addStores(requestDto, authUser));
