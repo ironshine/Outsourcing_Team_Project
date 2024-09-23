@@ -34,11 +34,9 @@ public class StoreService {
     public StoreSaveResponseDto addStores(StoreRequestDto storeRequestDto, AuthUser authUser) throws Exception {
         User user = userRepository.findById(authUser.getUserId())
                 .orElseThrow(() -> new NullPointerException("없는 유저 ID 입니다"));
-        if (authUser.getUserRole() != UserRole.OWNER) {
-            throw new IllegalAccessException("사장님 권한이 아닙니다");
-        }
+        ownerCheck(authUser);
         if (storeRepository.countByUserAndStoreStatus(user, true) >= 3) {
-            throw new IllegalAccessException("가게는 3개 제한입니다");
+            throw new IllegalStateException("가게는 3개 제한입니다");
         }
         Store store = Store.builder()
                 .storeName(storeRequestDto.getStoreName())
@@ -63,7 +61,7 @@ public class StoreService {
      *                      가게생성일, 가게수정일, 유저(가게주인) ID가 담긴 DTO) 목록
      */
     public List<StoresResponseDto> getStores(String store_name) {
-        List<Store> storeList = storeRepository.findAllByStoreNameAndStoreStatusOrderByAdPriceDesc(store_name, true);
+        List<Store> storeList = storeRepository.findAllByStoreNameContainingAndStoreStatusOrderByAdPriceDesc(store_name, true);
 
         return storeList.stream().map(StoresResponseDto::new).toList();
     }
@@ -79,9 +77,7 @@ public class StoreService {
     public StoreResponseDto getStore(Long storeId) throws Exception {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NullPointerException("해당 id의 가게가 없습니다."));
-        if (!store.getStoreStatus()) {
-            throw new IllegalAccessException("폐업한 가게입니다.");
-        }
+        storeStatusCheck(store);
         return new StoreResponseDto(store);
     }
 
@@ -97,18 +93,12 @@ public class StoreService {
      */
     @Transactional
     public StoreResponseDto updateStore(Long storeId, StoreRequestDto requestDto, AuthUser authUser) throws Exception {
-        if (authUser.getUserRole() != UserRole.OWNER) {
-            throw new IllegalAccessException("사장님 권한이 아닙니다");
-        }
+        ownerCheck(authUser);
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NullPointerException("해당 id의 가게가 없습니다."));
-        if (!store.getUser().getUserId().equals(authUser.getUserId())) {
-            throw new IllegalArgumentException("본인 가게만 수정 할 수 있습니다.");
-        }
-        if (!store.getStoreStatus()) {
-            throw new IllegalAccessException("폐업한 가게입니다.");
-        }
+        myStoreCheck(store, authUser);
+        storeStatusCheck(store);
         store.updateStore(requestDto);
 
         return new StoreResponseDto(store);
@@ -124,17 +114,11 @@ public class StoreService {
      */
     @Transactional
     public String closedStore(Long storeId, AuthUser authUser) throws Exception {
-        if (authUser.getUserRole() != UserRole.OWNER) {
-            throw new IllegalAccessException("사장님 권한이 아닙니다");
-        }
+        ownerCheck(authUser);
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NullPointerException("해당 id의 가게가 없습니다."));
-        if (!store.getUser().getUserId().equals(authUser.getUserId())) {
-            throw new IllegalArgumentException("본인 가게만 삭제 할 수 있습니다.");
-        }
-        if (!store.getStoreStatus()) {
-            throw new IllegalAccessException("폐업한 가게입니다.");
-        }
+        myStoreCheck(store, authUser);
+        storeStatusCheck(store);
         store.closedStore();
 
         return "폐업신고 완료";
@@ -156,5 +140,21 @@ public class StoreService {
                 .orElseThrow(() -> new NullPointerException("해당 id의 가게가 없습니다."));
         store.addAdPrice(adPrice);
         return new AdsResponseDto(store.getAdPrice());
+    }
+
+    public void ownerCheck(AuthUser authUser) throws Exception{
+        if (authUser.getUserRole() != UserRole.OWNER) {
+            throw new IllegalAccessException("사장님 권한이 아닙니다");
+        }
+    }
+    public void storeStatusCheck(Store store) throws Exception {
+        if (!store.getStoreStatus()) {
+            throw new IllegalAccessException("폐업한 가게입니다.");
+        }
+    }
+    public void myStoreCheck(Store store, AuthUser authUser) {
+        if (!store.getUser().getUserId().equals(authUser.getUserId())) {
+            throw new IllegalArgumentException("본인 가게가 아닙니다");
+        }
     }
 }
