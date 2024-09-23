@@ -1,4 +1,4 @@
-package com.sparta.outsourcing_team_project.domain.orders.entity;
+package com.sparta.outsourcing_team_project.domain.order.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
