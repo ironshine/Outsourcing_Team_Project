@@ -30,9 +30,9 @@ public class ReviewController {
     @GetMapping("/api/stores/{storeId}/reviews")
     public ResponseEntity<List<ReviewResponseDto>> getAllReviewsByStar(
             @PathVariable long storeId,
-            @RequestParam int mixRating,
+            @RequestParam int minRating,
             @RequestParam int maxRating) {
-        return ResponseEntity.ok(reviewService.getReviewByStar(storeId, mixRating, maxRating);
+        return ResponseEntity.ok(reviewService.getReviewByStar(storeId, minRating, maxRating));
     }
 
 
