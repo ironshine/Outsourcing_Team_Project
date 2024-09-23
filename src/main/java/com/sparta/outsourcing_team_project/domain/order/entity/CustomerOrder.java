@@ -27,7 +27,7 @@ public class CustomerOrder extends TimeStamp {
 
     @Column(nullable = false, name = "order_status", length = 6)
     @Enumerated(EnumType.STRING)
-    private OrderStatusEnum orderStatus;
+    private OrderStatusEnum orderStatus = OrderStatusEnum.STATELESS;
 
     //연관관계 임시설정 합병후 확인필요
     @ManyToOne(fetch = FetchType.LAZY)

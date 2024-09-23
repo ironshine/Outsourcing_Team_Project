@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum OrderStatusEnum {
+    STATELESS(Status.STATELESS),
     PENDING(Status.PENDING),
     ORDER_CANCELLED(Status.ORDER_CANCELLED),
     PREPARING(Status.PREPARING),
@@ -25,6 +26,7 @@ public enum OrderStatusEnum {
     }
 
     public static class Status{
+        public static final String STATELESS = "무상태";
         public static final String PENDING = "주문 대기";
         public static final String ORDER_CANCELLED = "주문 취소";
         public static final String PREPARING = "가게 조리중";
