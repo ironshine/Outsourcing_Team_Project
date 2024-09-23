@@ -12,7 +12,17 @@ public enum OrderStatusEnum {
 
     private final String status;
 
-    OrderStatusEnum(String status) {this.status = status;}
+    OrderStatusEnum(String status) {
+        // 입력데이터 대문자변환 및 입력값 검증로직
+        this.status = status.toUpperCase();
+        if(!this.status.equals("ORDER_CANCELLED")
+                && !this.status.equals("PREPARING")
+                && !this.status.equals("IN_DELIVERY")
+                && !this.status.equals("DELIVERED")
+        ){
+            new IllegalArgumentException("주문 상태 변경값이 올바르지 않습니다.");
+        }
+    }
 
     public static class Status{
         public static final String PENDING = "주문 대기";
