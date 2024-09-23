@@ -1,7 +1,7 @@
 package com.sparta.outsourcing_team_project.domain.review.entity;
 
-import com.sparta.outsourcing_team_project.domain.orders.entity.Orders;
-import com.sparta.outsourcing_team_project.domain.orders.entity.TimeStamp;
+import com.sparta.outsourcing_team_project.domain.order.entity.CustomerOrder;
+import com.sparta.outsourcing_team_project.domain.order.entity.TimeStamp;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +28,7 @@ public class Review extends TimeStamp {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
-    private Orders order;
+    private CustomerOrder order;
 
     @Column(name ="store_id")
     private Long storeId;
