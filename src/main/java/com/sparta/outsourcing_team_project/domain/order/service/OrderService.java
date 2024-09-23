@@ -15,14 +15,17 @@ import com.sparta.outsourcing_team_project.domain.order.repository.OrderReposito
 import com.sparta.outsourcing_team_project.domain.store.entity.Store;
 import com.sparta.outsourcing_team_project.domain.store.repository.StoreRepository;
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
+import com.sparta.outsourcing_team_project.domain.user.enums.UserRole;
 import com.sparta.outsourcing_team_project.domain.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.nio.file.AccessDeniedException;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,7 +71,10 @@ public class OrderService {
         return optionDtos;
     }
 
-    public OrderResponseDto createOrder(OrderOptionsRequestDto requestDto, AuthUser authUser) {
+    public OrderResponseDto createOrder(OrderOptionsRequestDto requestDto, AuthUser authUser) throws AccessDeniedException {
+        if(authUser.getUserRole() == UserRole.USER){
+            throw new AccessDeniedException("오너 계정은 주문 요청할 수 없습니다");
+        }
 
         // 대이터 조회
         Store store = storeRepository.findById(requestDto.getStoreId()).orElseThrow(
@@ -88,6 +94,22 @@ public class OrderService {
             totalPrice += option.getOptionPrice();
         }
         totalPrice += menu.getPrice();
+
+        // 최소 주문금액 검증로직
+        Integer minPrice = store.getMinOrderPrice();
+
+        if(totalPrice >= minPrice){
+            throw new IllegalArgumentException("최소주문 금액은 " + minPrice + "원 입니다.");
+        }
+
+
+        // 가게 영업시간 검증로직
+        LocalTime currentTime = LocalTime.now();
+        LocalTime openTime = store.getStoreOpenTime();
+        LocalTime closeTime = store.getStoreCloseTime();
+        if(currentTime.isBefore(openTime) || currentTime.isAfter(closeTime)){
+            throw new IllegalArgumentException("가게 오픈 시간이 아닙니다.");
+        }
 
         // 주문 요청 저장
         CustomerOrder order = orderRepository.save(new CustomerOrder(
@@ -125,7 +147,7 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderStatusResponseDto acceptOrder(Long orderId, AuthUser authUser) {
+    public OrderStatusResponseDto acceptOrder(Long orderId, AuthUser authUser) throws AccessDeniedException {
 
         // 주문데이터 조회
         CustomerOrder order = orderRepository.findById(orderId).orElseThrow(
@@ -134,7 +156,11 @@ public class OrderService {
 
         // 유저 인가 로직
         if(order.getStore().getUser().getUserId() != authUser.getUserId()){
-            new AccessDeniedException("가게 오너 계정만 접근 가능합니다.");
+            throw new AccessDeniedException("가게 오너 계정만 접근 가능합니다.");
+        }
+
+        if(order.getOrderStatus() == OrderStatusEnum.PREPARING){
+            throw new DuplicateKeyException("이미 수락된 주문입니다.");
         }
 
         // 주문상태 업데이트
@@ -152,7 +178,8 @@ public class OrderService {
         return response;
     }
 
-    public OrderStatusResponseDto changeOrderStatus(Long storeId, Long orderId, OrderStatusEnum orderStatus, AuthUser authUser) {
+    @Transactional
+    public OrderStatusResponseDto changeOrderStatus(Long storeId, Long orderId, OrderStatusEnum orderStatus, AuthUser authUser) throws AccessDeniedException {
         // 가게 데이터 조회
         Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new InvalidRequestException("유효하지 않는 가게입니다.")
@@ -160,7 +187,7 @@ public class OrderService {
 
         // 유저 인가 로직
         if(store.getUser().getUserId() != authUser.getUserId()){
-            new AccessDeniedException("가게 오너 계정만 접근 가능합니다.");
+           throw new AccessDeniedException("가게 오너 계정만 접근 가능합니다.");
         }
 
         // 주문 데이터 조회
@@ -168,6 +195,9 @@ public class OrderService {
                 () -> new InvalidRequestException("유효하지 않는 주문입니다.")
         );
 
+        if(order.getOrderStatus() == OrderStatusEnum.ORDER_CANCELLED){
+            throw new DuplicateKeyException("이미 취소된 주문은 변경할 수 없습니다.");
+        }
         // 주문상태 업데이트
         CustomerOrder updateStatus = order.changeStatus(orderStatus);
 

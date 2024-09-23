@@ -1,6 +1,10 @@
 package com.sparta.outsourcing_team_project.domain.order.aop;
 
 import com.sparta.outsourcing_team_project.domain.common.dto.AuthUser;
+import com.sparta.outsourcing_team_project.domain.order.entity.CustomerOrder;
+import com.sparta.outsourcing_team_project.domain.order.repository.OrderRepository;
+import com.sparta.outsourcing_team_project.domain.store.entity.Store;
+import com.sparta.outsourcing_team_project.domain.store.repository.StoreRepository;
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
 import com.sparta.outsourcing_team_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,9 @@ public class LoggingAspect {
 
     @Autowired
     private final UserRepository userRepository;
+    private final StoreRepository storeRepository;
+    private final OrderRepository orderRepository;
+
 
     @Pointcut("@annotation(com.sparta.outsourcing_team_project.domain.order.aop.annotation.RequestTrack)")
     private void requestLog(){}
@@ -30,10 +37,11 @@ public class LoggingAspect {
         for(Object arg : joinPoint.getArgs()){
             if(arg instanceof AuthUser){
                 authUser = (AuthUser)arg;
-                break;
             }
+
         }
         User user = userRepository.findById(authUser.getUserId()).orElse(null);
+
         // 임시
         Long storeId = 1L;
         Long orderId = 1L;
