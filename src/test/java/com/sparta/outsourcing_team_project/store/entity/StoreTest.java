@@ -1,6 +1,5 @@
 package com.sparta.outsourcing_team_project.store.entity;
 
-import com.sparta.outsourcing_team_project.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
