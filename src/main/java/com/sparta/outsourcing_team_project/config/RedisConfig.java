@@ -1,4 +1,4 @@
-package com.sparta.outsourcing_team_project.common.config;
+package com.sparta.outsourcing_team_project.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
