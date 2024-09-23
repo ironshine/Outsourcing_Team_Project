@@ -46,7 +46,7 @@ public class ReviewService {
     }
 
     public List<ReviewResponseDto> getReviewByStar(long storeId, int minRating, int maxRating) {
-        List<Review> reviewList = reviewRepository.findAllByStore_IdAndStarBetweenOrderByModifiedAtDesc(storeId, minRating, maxRating);
+        List<Review> reviewList = reviewRepository.findAllByStore_IdAndRatingBetweenOrderByModifiedAtDesc(storeId, minRating, maxRating);
         List<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
 
         for (Review review : reviewList) {
