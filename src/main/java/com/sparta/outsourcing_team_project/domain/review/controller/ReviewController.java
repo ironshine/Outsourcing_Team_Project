@@ -34,6 +34,4 @@ public class ReviewController {
             @RequestParam int maxRating) {
         return ResponseEntity.ok(reviewService.getReviewByStar(storeId, minRating, maxRating));
     }
-
-
 }

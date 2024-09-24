@@ -44,10 +44,8 @@ public class UserService {
     }
 
     private void passwordConditions(String newPassword) {
-        if (newPassword.length() < 8 ||
-                !newPassword.matches(".*\\d.*") ||
-                !newPassword.matches(".*[A-Z].*")) {
-            throw new InvalidRequestException("새 비밀번호는 8자 이상이어야 하고, 숫자와 대문자를 포함해야 합니다.");
+        if (!newPassword.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*-]).{8,15}$")) {
+            throw new InvalidRequestException("비밀번호는 8자 이상 15자 이하로, 대문자, 소문자, 숫자, 특수문자를 각각 최소 1개씩 포함해야 합니다.");
         }
     }
 }

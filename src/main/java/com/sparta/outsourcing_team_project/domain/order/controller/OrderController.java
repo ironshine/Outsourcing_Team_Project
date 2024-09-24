@@ -9,10 +9,12 @@ import com.sparta.outsourcing_team_project.domain.order.dto.OrderResponseDto;
 import com.sparta.outsourcing_team_project.domain.order.dto.OrderStatusResponseDto;
 import com.sparta.outsourcing_team_project.domain.order.enums.OrderStatusEnum;
 import com.sparta.outsourcing_team_project.domain.order.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -31,10 +33,9 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getMenuOptions(storeId, menuId, authUser));
     }
     // 주문 요청
-    @RequestTrack
     @PostMapping
     public ResponseEntity<OrderResponseDto> createOrder(
-            @RequestBody OrderOptionsRequestDto requestDto, @Auth AuthUser authUser) {
+            @RequestBody @Valid OrderOptionsRequestDto requestDto, @Auth AuthUser authUser) throws AccessDeniedException {
 
         return ResponseEntity.ok(orderService.createOrder(requestDto, authUser));
     }
@@ -42,19 +43,18 @@ public class OrderController {
     // 주문 수락
     @RequestTrack
     @PatchMapping("/{orderId}")
-    public ResponseEntity<OrderStatusResponseDto> approveOrder(@PathVariable Long orderId, @Auth AuthUser authUser) {
+    public ResponseEntity<OrderStatusResponseDto> approveOrder(@PathVariable Long orderId, @Auth AuthUser authUser) throws AccessDeniedException {
 
         return ResponseEntity.ok(orderService.acceptOrder(orderId, authUser));
     }
 
     // 주문 상태 변경
-    @RequestTrack
     @PatchMapping
     public ResponseEntity<OrderStatusResponseDto> changeOrderStatus(
             @RequestParam Long storeId,
             @RequestParam Long orderId,
             @RequestParam OrderStatusEnum orderStatus,
-            @Auth AuthUser authUser) {
+            @Auth AuthUser authUser) throws AccessDeniedException {
 
         return ResponseEntity.ok(orderService.changeOrderStatus(storeId, orderId, orderStatus, authUser));
     }

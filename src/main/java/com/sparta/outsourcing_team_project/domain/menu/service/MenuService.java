@@ -1,14 +1,16 @@
 package com.sparta.outsourcing_team_project.domain.menu.service;
 
+import com.sparta.outsourcing_team_project.domain.common.dto.AuthUser;
+import com.sparta.outsourcing_team_project.domain.common.exception.InvalidRequestException;
+import com.sparta.outsourcing_team_project.domain.menu.dto.MenuRequest;
+import com.sparta.outsourcing_team_project.domain.menu.dto.MenuResponse;
 import com.sparta.outsourcing_team_project.domain.common.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.menu.dto.MenuUpdateRequest;
+import com.sparta.outsourcing_team_project.domain.menu.entity.Menu;
 import com.sparta.outsourcing_team_project.domain.menu.enums.MenuCategory;
 import com.sparta.outsourcing_team_project.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing_team_project.domain.store.entity.Store;
 import com.sparta.outsourcing_team_project.domain.store.repository.StoreRepository;
-import com.sparta.outsourcing_team_project.domain.menu.dto.MenuRequest;
-import com.sparta.outsourcing_team_project.domain.menu.dto.MenuResponse;
-import com.sparta.outsourcing_team_project.domain.menu.entity.Menu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +31,10 @@ public class MenuService {
      * @return MenuResponse : 메뉴 이름과 메뉴 가격이 담긴 DTO
      */
     @Transactional
-    public MenuResponse create(long storeId, MenuRequest menuRequest) {
+    public MenuResponse create(AuthUser authUser, long storeId, MenuRequest menuRequest) {
         Store store = isValidStore(storeId);
+
+        isStoreOwner(authUser, store);
 
         Menu newMenu = Menu.builder()
                 .menuName(menuRequest.getMenuName())
@@ -56,8 +60,10 @@ public class MenuService {
      * @return MenuResponse : 메뉴 이름과 메뉴 가격이 담긴 DTO
      */
     @Transactional
-    public MenuResponse update(long storeId, long menuId, MenuUpdateRequest menuUpdateRequest) {
+    public MenuResponse update(AuthUser authUser, long storeId, long menuId, MenuUpdateRequest menuUpdateRequest) {
         Store store = isValidStore(storeId);
+
+        isStoreOwner(authUser, store);
 
         Menu menu = isExistMenu(menuId);
 
@@ -79,8 +85,10 @@ public class MenuService {
      * @param menuId : 메뉴 ID
      */
     @Transactional
-    public void delete(long menuId) {
+    public void delete(AuthUser authUser, long menuId) {
         Menu menu = isExistMenu(menuId);
+
+        isStoreOwner(authUser, menu.getStore());
 
         menu.updateStatus(false);
     }
@@ -112,5 +120,17 @@ public class MenuService {
     private Menu isExistMenu(long menuId) {
         return menuRepository.findById(menuId).orElseThrow(() ->
                 new InvalidRequestException("존재하지 않는 메뉴입니다."));
+    }
+
+    /**
+     * 가게의 사장인지 확인
+     *
+     * @param authUser : 사용자 정보가 담긴 객체
+     * @param store    : 해당 메뉴를 가지고 있는 가게
+     */
+    private void isStoreOwner(AuthUser authUser, Store store) {
+        if (!authUser.getUserId().equals(store.getUser().getUserId())) {
+            throw new InvalidRequestException("해당 가게의 사장님이 아닙니다.");
+        }
     }
 }
