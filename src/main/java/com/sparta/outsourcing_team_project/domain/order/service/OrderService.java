@@ -70,7 +70,7 @@ public class OrderService{
     }
 
     public OrderResponseDto createOrder(OrderOptionsRequestDto requestDto, AuthUser authUser) throws AccessDeniedException {
-        if(authUser.getUserRole() == UserRole.USER){
+        if(authUser.getUserRole() == UserRole.OWNER){
             throw new AccessDeniedException("오너 계정은 주문 요청할 수 없습니다");
         }
 
