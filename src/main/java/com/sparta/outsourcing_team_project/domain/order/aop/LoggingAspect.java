@@ -8,6 +8,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class LoggingAspect {
     private void requestLog() {
     }
 
+    @Transactional(readOnly = true)
     @Around("requestLog()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 

@@ -1,6 +1,6 @@
 package com.sparta.outsourcing_team_project.domain.user.service;
 
-import com.sparta.outsourcing_team_project.domain.common.exception.InvalidRequestException;
+import com.sparta.outsourcing_team_project.config.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.user.dto.request.UserRoleChangeRequest;
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
 import com.sparta.outsourcing_team_project.domain.user.enums.UserRole;

@@ -1,7 +1,7 @@
 package com.sparta.outsourcing_team_project.domain.user.service;
 
 import com.sparta.outsourcing_team_project.config.PasswordEncoder;
-import com.sparta.outsourcing_team_project.domain.common.exception.InvalidRequestException;
+import com.sparta.outsourcing_team_project.config.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.user.dto.request.UserChangePasswordRequest;
 import com.sparta.outsourcing_team_project.domain.user.dto.response.UserResponse;
 import com.sparta.outsourcing_team_project.domain.user.entity.User;

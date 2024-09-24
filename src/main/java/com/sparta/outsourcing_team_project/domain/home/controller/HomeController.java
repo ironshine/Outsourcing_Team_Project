@@ -1,8 +1,8 @@
 package com.sparta.outsourcing_team_project.domain.home.controller;
 
-import com.sparta.outsourcing_team_project.domain.store.dto.StoresResponseDto;
 import com.sparta.outsourcing_team_project.domain.home.service.HomeService;
 import com.sparta.outsourcing_team_project.domain.menu.enums.MenuCategory;
+import com.sparta.outsourcing_team_project.domain.store.dto.StoresResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
