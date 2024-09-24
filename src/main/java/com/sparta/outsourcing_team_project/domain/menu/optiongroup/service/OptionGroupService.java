@@ -1,12 +1,15 @@
 package com.sparta.outsourcing_team_project.domain.menu.optiongroup.service;
 
 import com.sparta.outsourcing_team_project.domain.common.exception.InvalidRequestException;
+import com.sparta.outsourcing_team_project.domain.common.dto.AuthUser;
+import com.sparta.outsourcing_team_project.domain.common.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.menu.entity.Menu;
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.dto.OptionGroupRequest;
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.dto.OptionGroupResponse;
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.entity.OptionGroup;
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.repository.OptionGroupRepository;
 import com.sparta.outsourcing_team_project.domain.menu.repository.MenuRepository;
+import com.sparta.outsourcing_team_project.domain.store.entity.Store;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +30,10 @@ public class OptionGroupService {
      * @return OptionGroupResponse : 옵션 그룹의 이름이 담긴 DTO
      */
     @Transactional
-    public OptionGroupResponse create(long menuId, OptionGroupRequest optionGroupRequest) {
+    public OptionGroupResponse create(AuthUser authuser, long menuId, OptionGroupRequest optionGroupRequest) {
         Menu menu = isValidMenu(menuId);
+
+        isStoreOwner(authuser, menu.getStore());
 
         OptionGroup newOptionGroup = OptionGroup.builder()
                 .optionGroupName(optionGroupRequest.getOptionGroupName())
@@ -50,8 +55,10 @@ public class OptionGroupService {
      * @return OptionGroupResponse : 옵션 그룹의 이름이 담긴 DTO
      */
     @Transactional
-    public OptionGroupResponse update(long menuId, long optionGroupId, OptionGroupRequest optionGroupRequest) {
+    public OptionGroupResponse update(AuthUser authuser, long menuId, long optionGroupId, OptionGroupRequest optionGroupRequest) {
         Menu menu = isValidMenu(menuId);
+
+        isStoreOwner(authuser, menu.getStore());
 
         OptionGroup optionGroup = isExistsOptionGroup(optionGroupId);
 
@@ -70,8 +77,10 @@ public class OptionGroupService {
      * @param optionGroupId : 옵션 그룹 ID
      */
     @Transactional
-    public void delete(long optionGroupId) {
+    public void delete(AuthUser authuser, long optionGroupId) {
         OptionGroup optionGroup = isExistsOptionGroup(optionGroupId);
+
+        isStoreOwner(authuser, optionGroup.getMenu().getStore());
 
         optionGroupRepository.delete(optionGroup);
     }
@@ -108,5 +117,17 @@ public class OptionGroupService {
     private OptionGroup isExistsOptionGroup(long optionGroupId) {
         return optionGroupRepository.findById(optionGroupId).orElseThrow(() ->
                 new InvalidRequestException("존재하지 않는 옵션 그룹입니다."));
+    }
+
+    /**
+     * 가게의 사장인지 확인
+     *
+     * @param authUser : 사용자 정보가 담긴 객체
+     * @param store    : 해당 메뉴를 가지고 있는 가게
+     */
+    private void isStoreOwner(AuthUser authUser, Store store) {
+        if (!authUser.getUserId().equals(store.getUser().getUserId())) {
+            throw new InvalidRequestException("해당 가게의 사장님이 아닙니다.");
+        }
     }
 }
