@@ -1,7 +1,7 @@
 package com.sparta.outsourcing_team_project.domain.menu.optiongroup.option.service;
 
+import com.sparta.outsourcing_team_project.config.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.common.dto.AuthUser;
-import com.sparta.outsourcing_team_project.domain.common.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.entity.OptionGroup;
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.option.dto.OptionRequest;
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.option.dto.OptionResponse;
