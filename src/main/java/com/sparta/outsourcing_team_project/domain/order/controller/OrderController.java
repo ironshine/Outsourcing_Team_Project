@@ -25,7 +25,7 @@ public class OrderController {
     private final OrderService orderService;
 
     // 주문 메뉴 옵션 조회
-    @GetMapping("/storeId/{storeId}/menuId/{menuId}")
+    @GetMapping("/store_id/{storeId}/menu_id/{menuId}")
     public ResponseEntity<List<OrderOptionsResponseDto>> getMenuOptions(
             @Auth AuthUser authUser,
             @PathVariable Long storeId,
