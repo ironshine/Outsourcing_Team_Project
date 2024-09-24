@@ -1,5 +1,6 @@
 package com.sparta.outsourcing_team_project.domain.store.service;
 
+import com.sparta.outsourcing_team_project.config.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.common.dto.AuthUser;
 import com.sparta.outsourcing_team_project.domain.menu.entity.Menu;
 import com.sparta.outsourcing_team_project.domain.store.dto.*;
@@ -16,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -72,7 +74,7 @@ class StoreServiceTest {
         // given
         given(userRepository.findById(anyLong())).willReturn(Optional.empty());
         // when
-        NullPointerException exception = assertThrows(NullPointerException.class,
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> storeService.addStores(storeRequestDto, authUser));
         // then
         assertEquals("없는 유저 ID 입니다", exception.getMessage());
@@ -85,7 +87,7 @@ class StoreServiceTest {
         AuthUser authUser1 = new AuthUser(1L, "치킨집@mail.com", UserRole.USER);
         given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         // when
-        IllegalAccessException exception = assertThrows(IllegalAccessException.class,
+        AccessDeniedException exception = assertThrows(AccessDeniedException.class,
                 () -> storeService.addStores(storeRequestDto, authUser1));
         // then
         assertEquals("사장님 권한이 아닙니다", exception.getMessage());
@@ -98,7 +100,7 @@ class StoreServiceTest {
         given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         given(storeRepository.countByUserAndStoreStatus(any(), any())).willReturn(4L);
         // when
-        IllegalStateException exception = assertThrows(IllegalStateException.class,
+        InvalidRequestException exception = assertThrows(InvalidRequestException.class,
                 () -> storeService.addStores(storeRequestDto, authUser));
         // then
         assertEquals("가게는 3개 제한입니다", exception.getMessage());
@@ -147,7 +149,7 @@ class StoreServiceTest {
 
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
         // when
-        IllegalAccessException exception = assertThrows(IllegalAccessException.class,
+        AccessDeniedException exception = assertThrows(AccessDeniedException.class,
                 () -> storeService.getStore(anyLong()));
         // then
         assertEquals("폐업한 가게입니다.", exception.getMessage());
@@ -175,7 +177,7 @@ class StoreServiceTest {
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        AccessDeniedException exception = assertThrows(AccessDeniedException.class,
                 () -> storeService.updateStore(anyLong(), storeRequestDto, authUser1));
 
         // then
@@ -191,7 +193,7 @@ class StoreServiceTest {
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
 
         // when
-        IllegalAccessException exception = assertThrows(IllegalAccessException.class,
+        AccessDeniedException exception = assertThrows(AccessDeniedException.class,
                 () -> storeService.updateStore(anyLong(), storeRequestDto, authUser));
 
         // then
