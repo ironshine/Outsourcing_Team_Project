@@ -80,7 +80,7 @@ public class Store extends TimeStamp {
         this.storeStatus = false;
     }
 
-    // 광고비 추가
+    // 광고비 추가 메서드
     public void addAdPrice(long adPrice) {
         this.adPrice += adPrice;
     }
