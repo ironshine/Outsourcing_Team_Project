@@ -1,7 +1,7 @@
 package com.sparta.outsourcing_team_project.domain.store.repository;
 
-import com.sparta.outsourcing_team_project.domain.store.entity.Store;
 import com.sparta.outsourcing_team_project.domain.menu.enums.MenuCategory;
+import com.sparta.outsourcing_team_project.domain.store.entity.Store;
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,10 +16,11 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     // 가게 몇개 있는지
 //    Long countByUserAndStoreStatus(User user, Boolean storeStatus);
 
-    @Query("SELECT s FROM Store s LEFT JOIN s.menus m WHERE s.storeName LIKE %:searchTerm% OR m.menuName LIKE %:searchTerm%")
-    List<Store> findByStoreNameOrMenuName(@Param("searchTerm") String storeTerm);
+    @Query("SELECT s FROM Store s LEFT JOIN s.menus m WHERE s.storeName LIKE %:searchTerm% OR m.menuName LIKE %:searchTerm% ORDER BY s.adPrice")
+    List<Store> findByStoreNameOrMenuNameOrderByAdPrice(@Param("searchTerm") String storeTerm);
 
     Long countByUserAndStoreStatus(User user, Boolean storeStatus);
+
     @Query("SELECT s FROM Store s LEFT JOIN s.menus m WHERE m.menuCategory IN (:category)")
     List<Store> findAllByMenuCategory(@Param("category") MenuCategory category);
 }
