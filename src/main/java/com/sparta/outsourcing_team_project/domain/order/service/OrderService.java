@@ -17,15 +17,15 @@ import com.sparta.outsourcing_team_project.domain.store.repository.StoreReposito
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
 import com.sparta.outsourcing_team_project.domain.user.enums.UserRole;
 import com.sparta.outsourcing_team_project.domain.user.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -187,7 +187,7 @@ public class OrderService {
 
         // 유저 인가 로직
         if(store.getUser().getUserId() != authUser.getUserId()){
-           throw new AccessDeniedException("가게 오너 계정만 접근 가능합니다.");
+            new AccessDeniedException("가게 오너 계정만 접근 가능합니다.");
         }
 
         // 주문 데이터 조회
