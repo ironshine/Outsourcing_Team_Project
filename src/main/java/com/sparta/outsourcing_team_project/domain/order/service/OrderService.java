@@ -17,13 +17,9 @@ import com.sparta.outsourcing_team_project.domain.store.repository.StoreReposito
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
 import com.sparta.outsourcing_team_project.domain.user.enums.UserRole;
 import com.sparta.outsourcing_team_project.domain.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
@@ -41,7 +37,6 @@ public class OrderService{
     private final OptionRepository optionRepository;
     private final OptionGroupRepository optionGroupRepository;
     private final UserRepository userRepository;
-    private final OrderAopDto orderAopDto;
 
     public List<OrderOptionsResponseDto> getMenuOptions(Long storeId, Long menuId, AuthUser authUser) {
 
@@ -125,7 +120,7 @@ public class OrderService{
         );
 
         // AOP 데이터 주입
-        orderAopDto.inputArgs(store.getId(), order.getId());
+        CustomerOrder savedOrder = orderRepository.findById(order.getId()).orElseThrow(null);
 
 
         // 옵션 객체에서 필요한 정보추출후 DTO에 주입
@@ -160,9 +155,6 @@ public class OrderService{
         CustomerOrder order = orderRepository.findById(orderId).orElseThrow(
                 () -> new InvalidRequestException("유효하지 않는 주문입니다.")
         );
-
-        // AOP 데이터 주입
-        orderAopDto.inputArgs(order.getStore().getId(), order.getId());
 
         // 유저 인가 로직
         if(order.getStore().getUser().getUserId() != authUser.getUserId()){
@@ -204,9 +196,6 @@ public class OrderService{
         CustomerOrder order = orderRepository.findById(orderId).orElseThrow(
                 () -> new InvalidRequestException("유효하지 않는 주문입니다.")
         );
-
-        // AOP 데이터 주입
-        orderAopDto.inputArgs(store.getId(),order.getId());
 
         if(order.getOrderStatus() == OrderStatusEnum.ORDER_CANCELLED){
             throw new DuplicateKeyException("이미 취소된 주문은 변경할 수 없습니다.");
