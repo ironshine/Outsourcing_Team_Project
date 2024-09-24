@@ -1,8 +1,8 @@
-package com.sparta.outsourcing_team_project.domain.menu.optiongroup.controller;
+package com.sparta.outsourcing_team_project.domain.menu.optiongroup.option.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.outsourcing_team_project.config.ArgumentResolver;
-import com.sparta.outsourcing_team_project.domain.menu.optiongroup.service.OptionGroupService;
+import com.sparta.outsourcing_team_project.domain.menu.optiongroup.option.service.OptionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,14 +22,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @MockBean(JpaMetamodelMappingContext.class)
-@WebMvcTest(OptionGroupController.class)
-class OptionGroupControllerTest {
+@WebMvcTest(OptionController.class)
+class OptionControllerTest {
 
     @MockBean
-    private OptionGroupService optionGroupService;
+    private OptionService optionService;
 
     @Autowired
-    private OptionGroupController optionGroupController;
+    private OptionController optionController;
 
     private MockMvc mockMvc;
 
@@ -38,7 +38,7 @@ class OptionGroupControllerTest {
 
     @BeforeEach
     public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(optionGroupController)
+        mockMvc = MockMvcBuilders.standaloneSetup(optionController)
                 .setCustomArgumentResolvers(argumentResolver)
                 .build();
     }
@@ -53,12 +53,12 @@ class OptionGroupControllerTest {
 
             given(argumentResolver.supportsParameter(any())).willReturn(true);
             given(argumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(TEST_AUTH_USER_OWNER);
-            given(optionGroupService.create(any(), anyLong(), any())).willReturn(TEST_OPTION_GROUP_RESPONSE_1);
+            given(optionService.create(any(), anyLong(), any())).willReturn(TEST_OPTION_RESPONSE_1);
 
             //when
-            ResultActions result = mockMvc.perform(post("/api/stores/menus/{menuId}", TEST_ID_1)
+            ResultActions result = mockMvc.perform(post("/api/stores/menus/option-groups/{optionGroupId}", TEST_ID_1)
                     .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(TEST_OPTION_GROUP_REQUEST_1)));
+                    .content(objectMapper.writeValueAsString(TEST_OPTION_REQUEST_1)));
 
             //then
             result.andExpect(status().isOk());
@@ -75,12 +75,12 @@ class OptionGroupControllerTest {
 
             given(argumentResolver.supportsParameter(any())).willReturn(true);
             given(argumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(TEST_AUTH_USER_OWNER);
-            given(optionGroupService.update(any(), anyLong(), anyLong(), any())).willReturn(TEST_OPTION_GROUP_RESPONSE_1);
+            given(optionService.update(any(), anyLong(), anyLong(), any())).willReturn(TEST_OPTION_RESPONSE_1);
 
             //when
-            ResultActions result = mockMvc.perform(put("/api/stores/menus/{menuId}/option-groups/{optionGroupId}", TEST_ID_1, TEST_ID_1)
+            ResultActions result = mockMvc.perform(put("/api/stores/menus/option-groups/{optionGroupId}/options/{optionId}", TEST_ID_1, TEST_ID_1)
                     .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(TEST_OPTION_GROUP_REQUEST_1)));
+                    .content(objectMapper.writeValueAsString(TEST_OPTION_REQUEST_1)));
 
             //then
             result.andExpect(status().isOk());
@@ -95,7 +95,7 @@ class OptionGroupControllerTest {
             //given
 
             //when
-            ResultActions result = mockMvc.perform(delete("/api/stores/menus/option-groups/{optionGroupId}", TEST_ID_1));
+            ResultActions result = mockMvc.perform(delete("/api/stores/menus/option-groups/options/{optionId}", TEST_ID_1));
 
             //then
             result.andExpect(status().isOk());

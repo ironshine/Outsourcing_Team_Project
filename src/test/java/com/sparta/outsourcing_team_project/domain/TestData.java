@@ -13,6 +13,9 @@ import com.sparta.outsourcing_team_project.domain.menu.optiongroup.option.dto.Op
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.option.dto.OptionResponse;
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.option.entity.Option;
 import com.sparta.outsourcing_team_project.domain.store.entity.Store;
+import com.sparta.outsourcing_team_project.domain.user.dto.request.UserChangePasswordRequest;
+import com.sparta.outsourcing_team_project.domain.user.dto.request.UserRoleChangeRequest;
+import com.sparta.outsourcing_team_project.domain.user.dto.response.UserResponse;
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
 import com.sparta.outsourcing_team_project.domain.user.enums.UserRole;
 
@@ -28,22 +31,28 @@ public class TestData {
     public final static String TEST_USER_NAME_1 = "test";
 
     // UserEmail
-    public final static String TEST_User_Email_1 = "test1@test.com";
+    public final static String TEST_USER_EMAIL_1 = "test1@test.com";
 
     // UserRole
     public final static UserRole TEST_USER_ROLE_1 = UserRole.USER;
     public final static UserRole TEST_USER_ROLE_2 = UserRole.OWNER;
 
     // AuthUser
-    public final static AuthUser TEST_AUTH_USER_USER = new AuthUser(TEST_ID_1, TEST_User_Email_1, TEST_USER_ROLE_1);
-    public final static AuthUser TEST_AUTH_USER_OWNER = new AuthUser(TEST_ID_1, TEST_User_Email_1, TEST_USER_ROLE_2);
+    public final static AuthUser TEST_AUTH_USER_USER = new AuthUser(TEST_ID_1, TEST_USER_EMAIL_1, TEST_USER_ROLE_1);
+    public final static AuthUser TEST_AUTH_USER_OWNER = new AuthUser(TEST_ID_1, TEST_USER_EMAIL_1, TEST_USER_ROLE_2);
 
     // Password
     public final static String TEST_PASSWORD_1 = "Testtest123!";
 
     // User
-    public final static User TEST_USER_1 = new User(TEST_ID_1, TEST_User_Email_1, TEST_USER_ROLE_1);
-    public final static User TEST_USER_2 = new User(TEST_ID_2, TEST_User_Email_1, TEST_USER_ROLE_1);
+    public final static User TEST_USER_1 = new User(TEST_ID_1, TEST_USER_EMAIL_1, TEST_USER_ROLE_1);
+    public final static User TEST_USER_2 = new User(TEST_ID_2, TEST_USER_EMAIL_1, TEST_USER_ROLE_1);
+
+    // UserChangePasswordRequest
+    public final static UserChangePasswordRequest TEST_USER_CHANGE_PASSWORD_REQUEST_1 = new UserChangePasswordRequest(TEST_PASSWORD_1, TEST_PASSWORD_1);
+
+    // UserResponse
+    public final static UserResponse TEST_USER_RESPONSE_1 = new UserResponse(TEST_ID_1, TEST_USER_EMAIL_1);
 
     // StoreName
     public final static String TEST_STORE_NAME_1 = "가게1";
@@ -183,6 +192,12 @@ public class TestData {
             .menu(TEST_MENU_2)
             .build();
 
+    public final static OptionGroup TEST_OPTION_GROUP_4 = OptionGroup.builder()
+            .id(TEST_ID_1)
+            .optionGroupName(TEST_OPTION_GROUP_NAME_1)
+            .menu(TEST_MENU_4)
+            .build();
+
     // OptionGroupResponse
     public final static OptionGroupResponse TEST_OPTION_GROUP_RESPONSE_1 = OptionGroupResponse.entityToDto(TEST_OPTION_GROUP_1);
 
@@ -200,9 +215,19 @@ public class TestData {
             .optionGroup(TEST_OPTION_GROUP_1)
             .build();
 
+    public final static Option TEST_OPTION_2 = Option.builder()
+            .id(TEST_ID_2)
+            .optionName(TEST_OPTION_NAME_1)
+            .optionPrice(TEST_OPTION_PRICE_1)
+            .optionGroup(TEST_OPTION_GROUP_3)
+            .build();
+
     // OptionRequest
     public final static OptionRequest TEST_OPTION_REQUEST_1 = new OptionRequest(TEST_OPTION_NAME_1, TEST_PRICE_1);
 
     // OptionResponse
     public final static OptionResponse TEST_OPTION_RESPONSE_1 = OptionResponse.entityToDto(TEST_OPTION_1);
+
+    // UserRoleChangeRequest
+    public final static UserRoleChangeRequest TEST_USER_ROLE_CHANGE_REQUEST_1 = new UserRoleChangeRequest("USER");
 }

@@ -1,11 +1,10 @@
-package com.sparta.outsourcing_team_project.userTest;
+package com.sparta.outsourcing_team_project.domain.user.service;
 
 import com.sparta.outsourcing_team_project.config.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.user.dto.request.UserRoleChangeRequest;
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
 import com.sparta.outsourcing_team_project.domain.user.enums.UserRole;
 import com.sparta.outsourcing_team_project.domain.user.repository.UserRepository;
-import com.sparta.outsourcing_team_project.domain.user.service.UserAdminService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
