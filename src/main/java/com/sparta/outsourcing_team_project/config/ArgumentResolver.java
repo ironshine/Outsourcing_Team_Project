@@ -19,7 +19,7 @@ public class ArgumentResolver implements HandlerMethodArgumentResolver {
         boolean hasAuthAnnotation = parameter.getParameterAnnotation(Auth.class) != null;
         boolean isAuthUserType = parameter.getParameterType().equals(AuthUser.class);
 
-        if(hasAuthAnnotation != isAuthUserType) {
+        if (hasAuthAnnotation != isAuthUserType) {
             throw new AuthException("@Auth와 AuthUser 타입은 함께 사용되어야 합니다.");
         }
         return hasAuthAnnotation;
@@ -31,12 +31,12 @@ public class ArgumentResolver implements HandlerMethodArgumentResolver {
             @Nullable ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest,
             @Nullable WebDataBinderFactory binderFactory
-    ){
+    ) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
         Long userId = (Long) request.getAttribute("userId");
         String userEmail = (String) request.getAttribute("userEmail");
-        UserRole userRole = UserRole.of((String) request.getAttribute("userRole"));
+        UserRole userRole = UserRole.of(String.valueOf(request.getAttribute("userRole")));
 
         return new AuthUser(userId, userEmail, userRole);
     }
