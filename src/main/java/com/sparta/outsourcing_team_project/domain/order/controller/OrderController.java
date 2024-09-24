@@ -33,7 +33,6 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getMenuOptions(storeId, menuId, authUser));
     }
     // 주문 요청
-    @RequestTrack
     @PostMapping
     public ResponseEntity<OrderResponseDto> createOrder(
             @RequestBody @Valid OrderOptionsRequestDto requestDto, @Auth AuthUser authUser) throws AccessDeniedException {
@@ -50,7 +49,6 @@ public class OrderController {
     }
 
     // 주문 상태 변경
-    @RequestTrack
     @PatchMapping
     public ResponseEntity<OrderStatusResponseDto> changeOrderStatus(
             @RequestParam Long storeId,

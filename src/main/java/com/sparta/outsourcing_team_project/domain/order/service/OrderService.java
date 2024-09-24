@@ -19,19 +19,19 @@ import com.sparta.outsourcing_team_project.domain.user.enums.UserRole;
 import com.sparta.outsourcing_team_project.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class OrderService {
+public class OrderService{
 
     private final OrderRepository orderRepository;
     private final StoreRepository storeRepository;
@@ -39,6 +39,7 @@ public class OrderService {
     private final OptionRepository optionRepository;
     private final OptionGroupRepository optionGroupRepository;
     private final UserRepository userRepository;
+    private final OrderAopDto orderAopDto;
 
     public List<OrderOptionsResponseDto> getMenuOptions(Long storeId, Long menuId, AuthUser authUser) {
 
@@ -88,8 +89,17 @@ public class OrderService {
         );
         List<Option> options = optionRepository.findByIdIn(requestDto.getOptionIds());
 
+        // 가게 영업시간 검증로직
+        LocalTime currentTime = LocalTime.now();
+        LocalTime openTime = store.getStoreOpenTime();
+        LocalTime closeTime = store.getStoreCloseTime();
+        if(currentTime.isBefore(openTime) || currentTime.isAfter(closeTime)){
+            throw new IllegalArgumentException("가게 오픈 시간이 아닙니다.");
+        }
+
         // 주문 총 가격
         Integer totalPrice = 0;
+
         for(Option option : options){
             totalPrice += option.getOptionPrice();
         }
@@ -98,17 +108,8 @@ public class OrderService {
         // 최소 주문금액 검증로직
         Integer minPrice = store.getMinOrderPrice();
 
-        if(totalPrice >= minPrice){
+        if(totalPrice <= minPrice){
             throw new IllegalArgumentException("최소주문 금액은 " + minPrice + "원 입니다.");
-        }
-
-
-        // 가게 영업시간 검증로직
-        LocalTime currentTime = LocalTime.now();
-        LocalTime openTime = store.getStoreOpenTime();
-        LocalTime closeTime = store.getStoreCloseTime();
-        if(currentTime.isBefore(openTime) || currentTime.isAfter(closeTime)){
-            throw new IllegalArgumentException("가게 오픈 시간이 아닙니다.");
         }
 
         // 주문 요청 저장
@@ -120,6 +121,10 @@ public class OrderService {
                 store,
                 menu)
         );
+
+        // AOP 데이터 주입
+        orderAopDto.inputArgs(store.getId(), order.getId());
+
 
         // 옵션 객체에서 필요한 정보추출후 DTO에 주입
         List<OrderOptionInfoDto> optionInfoDtos = options.stream()
@@ -153,6 +158,9 @@ public class OrderService {
         CustomerOrder order = orderRepository.findById(orderId).orElseThrow(
                 () -> new InvalidRequestException("유효하지 않는 주문입니다.")
         );
+
+        // AOP 데이터 주입
+        orderAopDto.inputArgs(order.getStore().getId(), order.getId());
 
         // 유저 인가 로직
         if(order.getStore().getUser().getUserId() != authUser.getUserId()){
@@ -194,6 +202,9 @@ public class OrderService {
         CustomerOrder order = orderRepository.findById(orderId).orElseThrow(
                 () -> new InvalidRequestException("유효하지 않는 주문입니다.")
         );
+
+        // AOP 데이터 주입
+        orderAopDto.inputArgs(store.getId(),order.getId());
 
         if(order.getOrderStatus() == OrderStatusEnum.ORDER_CANCELLED){
             throw new DuplicateKeyException("이미 취소된 주문은 변경할 수 없습니다.");
