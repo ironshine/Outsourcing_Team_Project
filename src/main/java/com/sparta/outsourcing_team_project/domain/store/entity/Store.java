@@ -49,16 +49,6 @@ public class Store extends TimeStamp {
     @Column(name = "ad_price", nullable = false)
     private Long adPrice;
 
-    @CreatedDate
-    @Column(updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createAt;
-
-    @LastModifiedDate
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime updatedAt;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id") // 사장님 id
     private User user;

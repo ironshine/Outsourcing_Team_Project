@@ -16,8 +16,8 @@ public class StoresResponseDto {
     private final LocalTime storeCloseTime;
     private final int minOrderPrice;
     private final String storeStatus;
-    private final LocalDateTime createAt;
-    private final LocalDateTime updatedAt;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime modifiedAt;
     private final Long userId;
 
     public StoresResponseDto(Store store) {
@@ -27,8 +27,8 @@ public class StoresResponseDto {
         this.storeCloseTime = store.getStoreCloseTime();
         this.minOrderPrice = store.getMinOrderPrice();
         this.storeStatus = storeStatus(store.getStoreStatus());
-        this.createAt = store.getCreateAt();
-        this.updatedAt = store.getUpdatedAt();
+        this.createdAt = store.getCreatedAt();
+        this.modifiedAt = store.getModifiedAt();
         this.userId = store.getUser().getUserId();
     }
 }

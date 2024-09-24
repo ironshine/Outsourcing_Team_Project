@@ -56,8 +56,6 @@ class StoreServiceTest {
             .minOrderPrice(20000)
             .storeStatus(true)
             .adPrice(0L)
-            .createAt(LocalDateTime.of(2024,9,23,22,00,00))
-            .updatedAt(LocalDateTime.of(2024,9,23,22,00,00))
             .user(user)
             .menus(menuList)
             .build();
