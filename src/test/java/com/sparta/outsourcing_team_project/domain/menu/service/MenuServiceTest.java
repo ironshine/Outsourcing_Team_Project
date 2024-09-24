@@ -1,6 +1,6 @@
 package com.sparta.outsourcing_team_project.domain.menu.service;
 
-import com.sparta.outsourcing_team_project.domain.common.exception.InvalidRequestException;
+import com.sparta.outsourcing_team_project.config.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.menu.dto.MenuResponse;
 import com.sparta.outsourcing_team_project.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing_team_project.domain.store.repository.StoreRepository;

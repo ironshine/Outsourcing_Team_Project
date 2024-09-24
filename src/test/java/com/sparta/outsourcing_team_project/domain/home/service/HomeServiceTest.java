@@ -14,14 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 
@@ -41,8 +38,6 @@ class HomeServiceTest {
             .minOrderPrice(20000)
             .storeStatus(true)
             .adPrice(0L)
-            .createAt(LocalDateTime.of(2024,9,23,22,00,00))
-            .updatedAt(LocalDateTime.of(2024,9,23,22,00,00))
             .user(user)
             .menus(menuList)
             .build();

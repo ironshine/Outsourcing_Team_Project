@@ -1,5 +1,6 @@
 package com.sparta.outsourcing_team_project.domain.store.service;
 
+import com.sparta.outsourcing_team_project.config.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.common.dto.AuthUser;
 import com.sparta.outsourcing_team_project.domain.menu.entity.Menu;
 import com.sparta.outsourcing_team_project.domain.store.dto.*;
@@ -16,13 +17,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDateTime;
+import java.nio.file.AccessDeniedException;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -35,19 +35,15 @@ class StoreServiceTest {
     private UserRepository userRepository;
     @InjectMocks
     private StoreService storeService;
-    //    @Mock
     private AuthUser authUser = new AuthUser(1L, "치킨집@email.com", UserRole.OWNER);
-    //    @Mock
     private User user = new User(1L, "치킨집@email.com", UserRole.OWNER);
     private List<Menu> menuList = List.of(new Menu());
-    //    @Mock
     private StoreRequestDto storeRequestDto = StoreRequestDto.builder()
             .storeName("백반집")
-            .storeOpenTime(LocalTime.of(1,00,00))
-            .storeCloseTime(LocalTime.of(21,00,00))
+            .storeOpenTime(LocalTime.of(1, 00, 00))
+            .storeCloseTime(LocalTime.of(21, 00, 00))
             .minOrderPrice(20)
             .build();
-    //    @Mock
     private Store store = Store.builder()
             .id(1L)
             .storeName("치킨집")
@@ -56,8 +52,6 @@ class StoreServiceTest {
             .minOrderPrice(20000)
             .storeStatus(true)
             .adPrice(0L)
-            .createAt(LocalDateTime.of(2024,9,23,22,00,00))
-            .updatedAt(LocalDateTime.of(2024,9,23,22,00,00))
             .user(user)
             .menus(menuList)
             .build();
@@ -69,21 +63,23 @@ class StoreServiceTest {
         given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         given(storeRepository.save(any())).willReturn(store);
         // when
-        StoreSaveResponseDto responseDto = storeService.addStores(storeRequestDto,authUser);
+        StoreSaveResponseDto responseDto = storeService.addStores(storeRequestDto, authUser);
         // then
         assertNotNull(responseDto);
     }
+
     @Test
     @DisplayName("가게 생성 없는 유저값 에러 발생")
     void addStores_없는_유저값_에러_발생() throws Exception {
         // given
         given(userRepository.findById(anyLong())).willReturn(Optional.empty());
         // when
-        NullPointerException exception = assertThrows(NullPointerException.class,
-                () -> storeService.addStores(storeRequestDto,authUser));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> storeService.addStores(storeRequestDto, authUser));
         // then
         assertEquals("없는 유저 ID 입니다", exception.getMessage());
     }
+
     @Test
     @DisplayName("가게 생성 권한 에러 발생")
     void addStores_권한_에러_발생() {
@@ -91,11 +87,12 @@ class StoreServiceTest {
         AuthUser authUser1 = new AuthUser(1L, "치킨집@mail.com", UserRole.USER);
         given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         // when
-        IllegalAccessException exception = assertThrows(IllegalAccessException.class,
-                () -> storeService.addStores(storeRequestDto,authUser1));
+        AccessDeniedException exception = assertThrows(AccessDeniedException.class,
+                () -> storeService.addStores(storeRequestDto, authUser1));
         // then
         assertEquals("사장님 권한이 아닙니다", exception.getMessage());
     }
+
     @Test
     @DisplayName("가게 생성 3개 초과 생성시 에러 발생")
     void addStores_3개_초과_생성시_에러_발생() {
@@ -103,8 +100,8 @@ class StoreServiceTest {
         given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         given(storeRepository.countByUserAndStoreStatus(any(), any())).willReturn(4L);
         // when
-        IllegalStateException exception = assertThrows(IllegalStateException.class,
-                () -> storeService.addStores(storeRequestDto,authUser));
+        InvalidRequestException exception = assertThrows(InvalidRequestException.class,
+                () -> storeService.addStores(storeRequestDto, authUser));
         // then
         assertEquals("가게는 3개 제한입니다", exception.getMessage());
     }
@@ -141,8 +138,9 @@ class StoreServiceTest {
         // when
         StoreResponseDto storeResponseDto = storeService.getStore(store_id);
         // then
-        assertEquals(storeResponseDto.getId(),store_id);
+        assertEquals(storeResponseDto.getId(), store_id);
     }
+
     @Test
     @DisplayName("폐업 가게 조회 에러 발생")
     void getStore_폐업_가게_조회_에러_발생() throws Exception {
@@ -151,7 +149,7 @@ class StoreServiceTest {
 
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
         // when
-        IllegalAccessException exception = assertThrows(IllegalAccessException.class,
+        AccessDeniedException exception = assertThrows(AccessDeniedException.class,
                 () -> storeService.getStore(anyLong()));
         // then
         assertEquals("폐업한 가게입니다.", exception.getMessage());
@@ -170,6 +168,7 @@ class StoreServiceTest {
         assertEquals(storeResponseDto.getStoreName(), storeRequestDto.getStoreName());
         assertEquals(storeResponseDto.getMinOrderPrice(), storeRequestDto.getMinOrderPrice());
     }
+
     @Test
     @DisplayName("가게 수정 본인 가게 아닐시 에러")
     void updateStore_본인_가게_아닐시_에러() throws Exception {
@@ -178,12 +177,13 @@ class StoreServiceTest {
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        AccessDeniedException exception = assertThrows(AccessDeniedException.class,
                 () -> storeService.updateStore(anyLong(), storeRequestDto, authUser1));
 
         // then
         assertEquals("본인 가게가 아닙니다", exception.getMessage());
     }
+
     @Test
     @DisplayName("가게 수정 폐업 가게 에러")
     void updateStore_폐업_가게_에러() throws Exception {
@@ -193,7 +193,7 @@ class StoreServiceTest {
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
 
         // when
-        IllegalAccessException exception = assertThrows(IllegalAccessException.class,
+        AccessDeniedException exception = assertThrows(AccessDeniedException.class,
                 () -> storeService.updateStore(anyLong(), storeRequestDto, authUser));
 
         // then
@@ -224,6 +224,7 @@ class StoreServiceTest {
         assertEquals(store.getAdPrice(), adsResponseDto.getAdPrice());
         assertEquals(store.getAdPrice(), adPrice);
     }
+
     @Test
     @DisplayName("광고비용 추가 음수 에러")
     void addAdPrice_음수_에러() {

@@ -1,9 +1,9 @@
 package com.sparta.outsourcing_team_project.domain.home.service;
 
+import com.sparta.outsourcing_team_project.domain.menu.enums.MenuCategory;
 import com.sparta.outsourcing_team_project.domain.store.dto.StoresResponseDto;
 import com.sparta.outsourcing_team_project.domain.store.entity.Store;
 import com.sparta.outsourcing_team_project.domain.store.repository.StoreRepository;
-import com.sparta.outsourcing_team_project.domain.menu.enums.MenuCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

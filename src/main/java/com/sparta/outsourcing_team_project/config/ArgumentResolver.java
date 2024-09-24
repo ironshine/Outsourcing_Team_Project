@@ -1,6 +1,6 @@
 package com.sparta.outsourcing_team_project.config;
 
-import com.sparta.outsourcing_team_project.domain.auth.exception.AuthException;
+import com.sparta.outsourcing_team_project.config.exception.AuthException;
 import com.sparta.outsourcing_team_project.domain.common.annotation.Auth;
 import com.sparta.outsourcing_team_project.domain.common.dto.AuthUser;
 import com.sparta.outsourcing_team_project.domain.user.enums.UserRole;
