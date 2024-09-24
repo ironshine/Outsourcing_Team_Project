@@ -1,4 +1,4 @@
-package com.sparta.outsourcing_team_project.userTest;
+package com.sparta.outsourcing_team_project.domain.user.service;
 
 import com.sparta.outsourcing_team_project.config.PasswordEncoder;
 import com.sparta.outsourcing_team_project.domain.common.exception.InvalidRequestException;
@@ -7,7 +7,6 @@ import com.sparta.outsourcing_team_project.domain.user.dto.response.UserResponse
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
 import com.sparta.outsourcing_team_project.domain.user.enums.UserRole;
 import com.sparta.outsourcing_team_project.domain.user.repository.UserRepository;
-import com.sparta.outsourcing_team_project.domain.user.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,7 +17,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,7 +32,7 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    public void 유저_조회_정상동작(){
+    public void 유저_조회_정상동작() {
         //given
         long userId = 1;
         User user = new User("test@example.com", "password", "username", UserRole.USER);
@@ -52,7 +50,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void 유저_조회_유저가_존재하지_않음(){
+    public void 유저_조회_유저가_존재하지_않음() {
         //given
         long userId = 1;
 //        User user = new User("test@example.com", "password", "username", UserRole.USER);
@@ -68,7 +66,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void 비밀번호_변경_정상동작(){
+    public void 비밀번호_변경_정상동작() {
         //given
         long userId = 1;
         String oldPassword = "OldPassword1!";
@@ -94,7 +92,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void 비밀번호를_변경할_유저가_존재하지_않음(){
+    public void 비밀번호를_변경할_유저가_존재하지_않음() {
         long userId = 1;
         UserChangePasswordRequest request = new UserChangePasswordRequest("OldPassword1!", "NewPassword1!");
 
@@ -105,7 +103,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void 새로운_비밀번호가_기존비밀번호와_같을경우(){
+    public void 새로운_비밀번호가_기존비밀번호와_같을경우() {
         //given
         long userId = 1;
         String oldPassword = "OldPassword1!";
@@ -125,7 +123,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void 잘못된_비밀번호(){
+    public void 잘못된_비밀번호() {
         long userId = 1;
         String oldPassword = "OldPassword1!";
         String newPassword = "NewPassword1!";

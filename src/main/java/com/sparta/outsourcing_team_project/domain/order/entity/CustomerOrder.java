@@ -4,7 +4,6 @@ import com.sparta.outsourcing_team_project.domain.menu.entity.Menu;
 import com.sparta.outsourcing_team_project.domain.order.enums.OrderStatusEnum;
 import com.sparta.outsourcing_team_project.domain.store.entity.Store;
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "customer_order")
 public class CustomerOrder extends TimeStamp {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -51,7 +51,7 @@ public class CustomerOrder extends TimeStamp {
         this.menu = menu;
     }
 
-    public CustomerOrder changeStatus(OrderStatusEnum status){
+    public CustomerOrder changeStatus(OrderStatusEnum status) {
         this.orderStatus = status;
         return this;
     }
