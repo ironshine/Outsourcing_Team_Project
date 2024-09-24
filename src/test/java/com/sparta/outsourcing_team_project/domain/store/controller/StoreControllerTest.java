@@ -1,6 +1,7 @@
 package com.sparta.outsourcing_team_project.domain.store.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sparta.outsourcing_team_project.config.ArgumentResolver;
 import com.sparta.outsourcing_team_project.domain.common.dto.AuthUser;
 import com.sparta.outsourcing_team_project.domain.menu.entity.Menu;
@@ -63,8 +64,6 @@ class StoreControllerTest {
             .build();
     private StoreRequestDto storeRequestDto = StoreRequestDto.builder()
             .storeName("백반집")
-            .storeOpenTime(LocalTime.now())
-            .storeCloseTime(LocalTime.now())
             .minOrderPrice(20)
             .build();
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -81,6 +80,7 @@ class StoreControllerTest {
     void addStores_성공() throws Exception {
         // given
         authSetUp();
+        objectMapper.registerModule(new JavaTimeModule());
         given(storeService.addStores(any(), any())).willReturn(storeSaveResponseDto);
         // when-then
         mvc.perform(post("/api/stores")

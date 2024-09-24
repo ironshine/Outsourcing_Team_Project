@@ -14,12 +14,10 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     List<Store> findAllByStoreNameContainingAndStoreStatusOrderByAdPriceDesc(String storeName, Boolean storeStatus);
 
     // 가게 몇개 있는지
-//    Long countByUserAndStoreStatus(User user, Boolean storeStatus);
+    Long countByUserAndStoreStatus(User user, Boolean storeStatus);
 
     @Query("SELECT s FROM Store s LEFT JOIN s.menus m WHERE s.storeName LIKE %:searchTerm% OR m.menuName LIKE %:searchTerm% ORDER BY s.adPrice")
     List<Store> findByStoreNameOrMenuNameOrderByAdPrice(@Param("searchTerm") String storeTerm);
-
-    Long countByUserAndStoreStatus(User user, Boolean storeStatus);
 
     @Query("SELECT s FROM Store s LEFT JOIN s.menus m WHERE m.menuCategory IN (:category)")
     List<Store> findAllByMenuCategory(@Param("category") MenuCategory category);

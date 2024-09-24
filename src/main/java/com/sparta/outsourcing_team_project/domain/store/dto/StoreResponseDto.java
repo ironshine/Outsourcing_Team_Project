@@ -38,6 +38,7 @@ public class StoreResponseDto {
     private List<MenuResponse> menuResponseList(List<Menu> menuList) {
         return menuList.stream().map(MenuResponse::entityToDto).toList();
     }
+
     protected static String storeStatus(boolean storeStatus) {
         return storeStatus ? "정상영업" : "폐업";
     }

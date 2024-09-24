@@ -1,19 +1,15 @@
 package com.sparta.outsourcing_team_project.domain.store.entity;
 
+import com.sparta.outsourcing_team_project.domain.menu.entity.Menu;
 import com.sparta.outsourcing_team_project.domain.order.entity.TimeStamp;
 import com.sparta.outsourcing_team_project.domain.store.dto.StoreRequestDto;
-import com.sparta.outsourcing_team_project.domain.menu.entity.Menu;
-
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
