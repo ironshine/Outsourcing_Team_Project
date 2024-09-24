@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoggingAspect {
 
-    @Pointcut("execution(* com.sparta.outsourcing_team_project.domain.order.repository..*(..))")
+    @Pointcut("execution(* com.sparta.outsourcing_team_project.domain.order.repository..*.findById(..))")
     private void requestLog() {
     }
 
