@@ -29,18 +29,21 @@ public class LoggingAspect {
         Object result = null;
 
         result = joinPoint.proceed();
+        Optional<?> entity = (Optional<?>) result;
 
-        Optional<CustomerOrder> customerOrder = (Optional<CustomerOrder>) result;
-        CustomerOrder order = customerOrder.get();
+        // 반환객체 검증후 로직실행
+        if(entity.get() instanceof CustomerOrder) {
+            Optional<CustomerOrder> customerOrder = (Optional<CustomerOrder>) result;
+            CustomerOrder order = customerOrder.get();
 
-        storeId = order.getStore().getId();
-        orderId = order.getId();
+            storeId = order.getStore().getId();
+            orderId = order.getId();
 
-        Date requestTimestamp = new Date();
-        log.info("::: requestTimestamp: {}", requestTimestamp);
-        log.info("::: requestStoreId: {}", storeId);
-        log.info("::: requestOrderId: {}", orderId);
-
+            Date requestTimestamp = new Date();
+            log.info("::: requestTimestamp: {}", requestTimestamp);
+            log.info("::: requestStoreId: {}", storeId);
+            log.info("::: requestOrderId: {}", orderId);
+        }
         return result;
     }
 }
