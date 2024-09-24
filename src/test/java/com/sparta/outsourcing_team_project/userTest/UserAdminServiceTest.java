@@ -1,6 +1,6 @@
 package com.sparta.outsourcing_team_project.userTest;
 
-import com.sparta.outsourcing_team_project.domain.common.exception.InvalidRequestException;
+import com.sparta.outsourcing_team_project.config.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.user.dto.request.UserRoleChangeRequest;
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
 import com.sparta.outsourcing_team_project.domain.user.enums.UserRole;
@@ -28,7 +28,7 @@ public class UserAdminServiceTest {
     private UserAdminService userAdminService;
 
     @Test
-    public void 사용자_역할_변경_성공(){
+    public void 사용자_역할_변경_성공() {
         //given
         long userId = 1;
         UserRoleChangeRequest request = new UserRoleChangeRequest("OWNER");
@@ -45,7 +45,7 @@ public class UserAdminServiceTest {
     }
 
     @Test
-    public void 사용자가_존재하지_않는_경우(){
+    public void 사용자가_존재하지_않는_경우() {
         long userId = 1;
         UserRoleChangeRequest request = new UserRoleChangeRequest("OWNER");
 

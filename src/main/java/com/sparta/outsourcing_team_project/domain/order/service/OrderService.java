@@ -1,7 +1,7 @@
 package com.sparta.outsourcing_team_project.domain.order.service;
 
+import com.sparta.outsourcing_team_project.config.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.common.dto.AuthUser;
-import com.sparta.outsourcing_team_project.domain.common.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.menu.entity.Menu;
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.entity.OptionGroup;
 import com.sparta.outsourcing_team_project.domain.menu.optiongroup.option.entity.Option;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class OrderService{
+public class OrderService {
 
     private final OrderRepository orderRepository;
     private final StoreRepository storeRepository;
@@ -70,7 +70,7 @@ public class OrderService{
     }
 
     public OrderResponseDto createOrder(OrderOptionsRequestDto requestDto, AuthUser authUser) throws AccessDeniedException {
-        if(authUser.getUserRole() == UserRole.OWNER){
+        if (authUser.getUserRole() == UserRole.USER) {
             throw new AccessDeniedException("오너 계정은 주문 요청할 수 없습니다");
         }
 
@@ -90,14 +90,14 @@ public class OrderService{
         LocalTime currentTime = LocalTime.now();
         LocalTime openTime = store.getStoreOpenTime();
         LocalTime closeTime = store.getStoreCloseTime();
-        if(currentTime.isBefore(openTime) || currentTime.isAfter(closeTime)){
+        if (currentTime.isBefore(openTime) || currentTime.isAfter(closeTime)) {
             throw new IllegalArgumentException("가게 오픈 시간이 아닙니다.");
         }
 
         // 주문 총 가격
         Integer totalPrice = 0;
 
-        for(Option option : options){
+        for (Option option : options) {
             totalPrice += option.getOptionPrice();
         }
         totalPrice += menu.getPrice();
@@ -105,7 +105,7 @@ public class OrderService{
         // 최소 주문금액 검증로직
         Integer minPrice = store.getMinOrderPrice();
 
-        if(totalPrice <= minPrice){
+        if (totalPrice <= minPrice) {
             throw new IllegalArgumentException("최소주문 금액은 " + minPrice + "원 입니다.");
         }
 
@@ -157,11 +157,11 @@ public class OrderService{
         );
 
         // 유저 인가 로직
-        if(order.getStore().getUser().getUserId() != authUser.getUserId()){
+        if (order.getStore().getUser().getUserId() != authUser.getUserId()) {
             throw new AccessDeniedException("가게 오너 계정만 접근 가능합니다.");
         }
 
-        if(order.getOrderStatus() == OrderStatusEnum.PREPARING){
+        if (order.getOrderStatus() == OrderStatusEnum.PREPARING) {
             throw new DuplicateKeyException("이미 수락된 주문입니다.");
         }
 
@@ -188,7 +188,7 @@ public class OrderService{
         );
 
         // 유저 인가 로직
-        if(store.getUser().getUserId() != authUser.getUserId()){
+        if (store.getUser().getUserId() != authUser.getUserId()) {
             new AccessDeniedException("가게 오너 계정만 접근 가능합니다.");
         }
 
@@ -197,7 +197,7 @@ public class OrderService{
                 () -> new InvalidRequestException("유효하지 않는 주문입니다.")
         );
 
-        if(order.getOrderStatus() == OrderStatusEnum.ORDER_CANCELLED){
+        if (order.getOrderStatus() == OrderStatusEnum.ORDER_CANCELLED) {
             throw new DuplicateKeyException("이미 취소된 주문은 변경할 수 없습니다.");
         }
         // 주문상태 업데이트

@@ -2,12 +2,12 @@ package com.sparta.outsourcing_team_project.domain.auth.service;
 
 import com.sparta.outsourcing_team_project.config.JwtUtil;
 import com.sparta.outsourcing_team_project.config.PasswordEncoder;
+import com.sparta.outsourcing_team_project.config.exception.AuthException;
+import com.sparta.outsourcing_team_project.config.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.auth.dto.request.SigninRequest;
 import com.sparta.outsourcing_team_project.domain.auth.dto.request.SignupRequest;
 import com.sparta.outsourcing_team_project.domain.auth.dto.response.SigninResponse;
 import com.sparta.outsourcing_team_project.domain.auth.dto.response.SignupResponse;
-import com.sparta.outsourcing_team_project.domain.auth.exception.AuthException;
-import com.sparta.outsourcing_team_project.domain.common.exception.InvalidRequestException;
 import com.sparta.outsourcing_team_project.domain.user.entity.User;
 import com.sparta.outsourcing_team_project.domain.user.enums.UserRole;
 import com.sparta.outsourcing_team_project.domain.user.repository.UserRepository;
