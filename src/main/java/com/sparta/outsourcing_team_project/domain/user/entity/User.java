@@ -1,6 +1,6 @@
 package com.sparta.outsourcing_team_project.domain.user.entity;
 
-import com.sparta.outsourcing_team_project.domain.common.entity.Timetamped;
+import com.sparta.outsourcing_team_project.domain.order.entity.TimeStamp;
 import com.sparta.outsourcing_team_project.domain.user.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Table(name = "user")
-public class User extends Timetamped {
+public class User extends TimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
